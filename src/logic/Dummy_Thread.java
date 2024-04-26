@@ -5,7 +5,8 @@ import javafx.stage.Screen;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Dummy_Thread implements Runnable{
-    private CopyOnWriteArrayList<String> list = SystemManager.testCarList;
+    private CopyOnWriteArrayList<Thread> list = SystemManager.testCarThread;
+    private CopyOnWriteArrayList<IdiotCar> list2 = SystemManager.testCars;
     int id;
     int sleeper;
     public Dummy_Thread(int ID, int sleepTime){
@@ -15,9 +16,19 @@ public class Dummy_Thread implements Runnable{
 
     public void printList(){
         int size = list.size();
-        for(int i = 0; i < size; i++) {
-            System.out.println("Dummy :"+ id + " print list: " + list.get(i));
-        }
+        int size2 = list2.size();
+        System.out.println("Thread list size: " + list.size());
+        System.out.println("Car list size: " + list2.size());
+
+
+//        for(int i = 0; i < size; i++) {
+//            System.out.println("Dummy :"+ id + " print list: " + list.get(i));
+//        }
+//
+//        for(int i = 0; i < size2; i++) {
+//            System.out.println("Dummy :"+ id + " print list: " + list2.get(i));
+//        }
+
 
     }
     @Override

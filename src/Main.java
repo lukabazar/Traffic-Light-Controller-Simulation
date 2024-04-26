@@ -15,6 +15,7 @@ import logic.IdiotCar;
 import logic.SystemManager;
 
 import java.awt.*;
+import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Main extends Application {
@@ -35,7 +36,7 @@ public class Main extends Application {
 
         BorderPane borderPane = new BorderPane();
         root.getChildren().add(borderPane);
-        CopyOnWriteArrayList<IdiotCar> carlist =  sysmgr.testCars;
+        //CopyOnWriteArrayList<IdiotCar> carlist =  sysmgr.testCars;
         //root.getChildren().add(carlist);
         Scene scene = new Scene(root);
         // Rows and cols might not be great on other values; 6 intersections
@@ -50,11 +51,11 @@ public class Main extends Application {
         sysmgrThread.start();
 
         AnimationTimer timer = new AnimationTimer() {
+            CopyOnWriteArrayList<IdiotCar> carlist =  sysmgr.testCars;
             @Override
             public void handle(long now) {
                 //Clear agents previous locations.
                 root.getChildren().clear();
-
                 root.getChildren().add(borderPane);
 
                 //re-add the car to group for the GUI.
@@ -67,10 +68,10 @@ public class Main extends Application {
 
 
 //        CopyOnWriteArrayList<String> list =  sysmgr.testIntersectionList;
-        //System.out.println(list.size());
-//        Dummy_Thread dummy = new Dummy_Thread(1, 5000);
-//        Thread dummyThread = new Thread(dummy);
-//        dummyThread.start();
+         //System.out.println(list.size());
+        Dummy_Thread dummy = new Dummy_Thread(1, 2000);
+        Thread dummyThread = new Thread(dummy);
+        dummyThread.start();
 //
 //        Dummy_Thread dummy2 = new Dummy_Thread(2, 3500);
 //        Thread dummyThread2 = new Thread(dummy2);

@@ -3,21 +3,25 @@ package logic;
 import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 
+import java.awt.*;
+
 public class IdiotCar implements Runnable {
     private double size;
     protected boolean running = true;
     int id;
     String direction;
+    String lane;
     double x;
     double y;
     int driveDistance = 10;
-    int sleepTime = 1000;
-    public IdiotCar(int ID, String dir, double xCoor, double yCoor, double Size){
+    int sleepTime = 700;
+    public IdiotCar(int ID, String dir, Point coord, double Size, String Lane){
         id = ID;
         direction = dir;
-        x = xCoor;
-        y = yCoor;
+        x = coord.getX();
+        y = coord.getY();
         size = Size;
+        lane = Lane;
     }
 
     private void drive(){

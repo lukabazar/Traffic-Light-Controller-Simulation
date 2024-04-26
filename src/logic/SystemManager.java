@@ -2,6 +2,7 @@ package logic;
 
 import javafx.stage.Screen;
 
+import java.awt.*;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -11,7 +12,7 @@ public class SystemManager implements Runnable{
 
     int row;
 
-    private double size, xLane1, xLane2, xLane3, xLane4, xLane5, xLane6, xLane7, xLane8;
+    private double size, outputSize, xLane1, xLane2, xLane3, xLane4, xLane5, xLane6, xLane7, xLane8;
     private double yLane1, yLane2, yLane3, yLane4, yLane5, yLane6, yLane7, yLane8, yLane9, yLane10,yLane11, yLane12;
     private double x0INTX1, xFINTX1, x0INTX2, xFINTX2, x0INTX3, xFINTX3, x0INTX4, xFINTX4, x0INTX5, xFINTX5, x0INTX6, xFINTX6;
     private double y0INTX1, yFINTX1, y0INTX2, yFINTX2, y0INTX3, yFINTX3, y0INTX4, yFINTX4, y0INTX5, yFINTX5, y0INTX6, yFINTX6;
@@ -32,7 +33,7 @@ public class SystemManager implements Runnable{
     public CopyOnWriteArrayList<String> testIntersectionList = new CopyOnWriteArrayList<>();
 
     public static CopyOnWriteArrayList<IdiotCar> testCars = new CopyOnWriteArrayList<>();
-    protected static CopyOnWriteArrayList<Thread> testCarThread = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Thread> testCarThread = new CopyOnWriteArrayList<>();
 
     //protected CopyOnWriteArrayList<Car> Cars = new CopyOnWriteArrayList<>();
     //protected CopyOnWriteArrayList<Thread> CarThreads = new CopyOnWriteArrayList<>();
@@ -43,6 +44,7 @@ public class SystemManager implements Runnable{
     public SystemManager(int rows){
          size = Screen.getPrimary().getBounds().getHeight() / (rows + 1);
          row = rows;
+         outputSize = Screen.getPrimary().getBounds().getHeight() / (rows + 1);
     }
 
     private void createLanes(){
@@ -185,9 +187,12 @@ public class SystemManager implements Runnable{
 
     private void createVehicle(){
         //RNG EMS vehicle creation.
+        Point carCoordinate = new Point();
         int EMSprobability;
         int directionRNG;
+        int laneRNG;
         String car;
+        String Lane = "";
         EMSprobability = (int)(Math.random()*100);
         directionRNG = (int)(Math.random()*(4));
         double startingX = 0;
@@ -195,36 +200,59 @@ public class SystemManager implements Runnable{
         String getDirection = direction[directionRNG];
 
         if(getDirection.equals("North")){
-            directionRNG = (int)(Math.random()*(North_Lanes.length-1));
-            startingY = size*3;
-            startingX = North_Lanes[directionRNG];
+            laneRNG = (int)(Math.random()*(North_Lanes.length-1));
+            startingY = size*2.5;
+            startingX = North_Lanes[laneRNG];
         }
         else if(getDirection.equals("South")){
-            directionRNG = (int)(Math.random()*(South_Lanes.length-1));
+            laneRNG = (int)(Math.random()*(South_Lanes.length-1));
             startingY = 0;
-            startingX = South_Lanes[directionRNG];
+            startingX = South_Lanes[laneRNG];
         }
         else if(getDirection.equals("East")){
-            directionRNG = (int)(Math.random()*(East_Lanes.length-1));
-            startingY = East_Lanes[directionRNG];
+            laneRNG = (int)(Math.random()*(East_Lanes.length-1));
+            startingY = East_Lanes[laneRNG];
             startingX = 0;
         }
         else if(getDirection.equals("West")){
-            directionRNG = (int)(Math.random()*(West_Lanes.length-1));
-            startingY = West_Lanes[directionRNG];
-            startingX = size*5;
+            laneRNG = (int)(Math.random()*(West_Lanes.length-1));
+            startingY = West_Lanes[laneRNG];
+            startingX = size*4.9;
         }
 
+        carCoordinate.setLocation(startingX, startingY);
+
+        if(getDirection.equals("North") || getDirection.equals("East")){
+            if(directionRNG%2 == 0){
+                Lane = "Left";
+            }
+            else{
+                Lane = "Right";
+            }
+        }
+
+        if(getDirection.equals("South") || getDirection.equals("West")){
+            if(directionRNG%2 == 0){
+                Lane = "Right";
+            }
+            else{
+                Lane = "Left";
+            }
+
+        }
+
+
         if(EMSprobability < createEMSProbability){
-            car = "EMS ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
-            idcar = new IdiotCar(carID, getDirection, startingX, startingY, size);
+            car = "EMS ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY +
+            " Lane: " + Lane;
+            idcar = new IdiotCar(carID, getDirection, carCoordinate, row, Lane);
         }
         else{
-            car = "Car ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
-            idcar = new IdiotCar(carID, getDirection, startingX, startingY, size);
+            car = "Car ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY +
+                    " Lane: " + Lane;
+            idcar = new IdiotCar(carID, getDirection, carCoordinate , outputSize, Lane);
         }
-        System.out.println(car);
-        //testCarList.add(car);
+        //System.out.println(car);
         testCars.add(idcar);
         Thread IDcar = new Thread(idcar);
         testCarThread.add(IDcar);
@@ -261,13 +289,17 @@ public class SystemManager implements Runnable{
     }
 
     private void removeVehicles(){
-        int testprobability = (int)(Math.random()*100);
-        size = testCarList.size();
-        if(testprobability < 25 && size > 0){
-            int removeRNG = (int)(Math.random()*size);
-            //System.out.println("Removed Car: " + testCarList.get(removeRNG));
-            testCarList.remove(removeRNG);
-            currentCars--;
+        size = testCarThread.size();
+        if(size > 0){
+            for(int i = 0; i < size-1; i++){
+                if(!testCarThread.get(i).isAlive()){
+                    System.out.println("should remove car");
+                    testCarThread.remove(i);
+                    testCars.remove(i);
+                    currentCars--;
+                    break;
+                }
+            }
         }
     }
 
@@ -286,7 +318,9 @@ public class SystemManager implements Runnable{
                     createVehicle();
                     TimeUnit.SECONDS.sleep(3);
                 }
-                removeVehicles();
+                for(int j = 0; j < testCars.size(); j++){
+                    removeVehicles();
+                }
                 Thread.sleep(sleepDelay);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
