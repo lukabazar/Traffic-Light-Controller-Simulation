@@ -11,7 +11,6 @@ public class SystemManager implements Runnable{
     IdiotCar idcar;
 
     int row;
-
     private double size, outputSize, xLane1, xLane2, xLane3, xLane4, xLane5, xLane6, xLane7, xLane8;
     private double yLane1, yLane2, yLane3, yLane4, yLane5, yLane6, yLane7, yLane8, yLane9, yLane10,yLane11, yLane12;
     private double x0INTX1, xFINTX1, x0INTX2, xFINTX2, x0INTX3, xFINTX3, x0INTX4, xFINTX4, x0INTX5, xFINTX5, x0INTX6, xFINTX6;
@@ -55,11 +54,11 @@ public class SystemManager implements Runnable{
         xLane3 = size/1.825;
         xLane4 = size/1.55;
 
-        xLane5 = (size*2)+xLane1;
-        xLane6 = (size*2)+xLane2;
+        xLane5 = (size*2)+(size/2.85);
+        xLane6 = (size*2)+(size/2.2);
 
-        xLane7 = (size*2)+xLane3;
-        xLane8 = (size*2)+xLane4;
+        xLane7 = (size*2)+(size/1.825);
+        xLane8 = (size*2)+(size/1.55);
 
 
         //yLanes store x coordinates. North-South Traffic
@@ -69,17 +68,17 @@ public class SystemManager implements Runnable{
         yLane3 = size/1.825;
         yLane4 = size/1.55;
 
-        yLane5 = (size*2)+yLane1;
-        yLane6 = (size*2)+yLane2;
+        yLane5 = (size*2)+(size/2.85);
+        yLane6 = (size*2)+(size/2.2);
 
-        yLane7 = (size*2)+yLane3;
-        yLane8 = (size*2)+yLane4;
+        yLane7 = (size*2)+(size/1.825);
+        yLane8 = (size*2)+(size/1.55);
 
-        yLane9 = (size*4)+yLane1;
-        yLane10 = (size*4)+yLane2;
+        yLane9 = (size*4)+(size/2.85);
+        yLane10 = (size*4)+(size/2.2);
 
-        yLane11 = (size*4)+yLane3;
-        yLane12 = (size*4)+yLane4;
+        yLane11 = (size*4)+(size/1.825);
+        yLane12 = (size*4)+(size/1.55);
 
         East_Lanes = new double[]{xLane3, xLane4, xLane7, xLane8};
         West_Lanes = new double[]{xLane1, xLane2, xLane5, xLane6};
@@ -201,7 +200,7 @@ public class SystemManager implements Runnable{
 
         if(getDirection.equals("North")){
             laneRNG = (int)(Math.random()*(North_Lanes.length-1));
-            startingY = size*2.5;
+            startingY = size*3;
             startingX = North_Lanes[laneRNG];
         }
         else if(getDirection.equals("South")){
@@ -217,11 +216,8 @@ public class SystemManager implements Runnable{
         else if(getDirection.equals("West")){
             laneRNG = (int)(Math.random()*(West_Lanes.length-1));
             startingY = West_Lanes[laneRNG];
-            startingX = size*4.9;
+            startingX = size*5;
         }
-
-        carCoordinate.setLocation(startingX, startingY);
-
         if(getDirection.equals("North") || getDirection.equals("East")){
             if(directionRNG%2 == 0){
                 Lane = "Left";
@@ -238,10 +234,9 @@ public class SystemManager implements Runnable{
             else{
                 Lane = "Left";
             }
-
         }
 
-
+        carCoordinate.setLocation(startingX, startingY);
         if(EMSprobability < createEMSProbability){
             car = "EMS ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY +
             " Lane: " + Lane;

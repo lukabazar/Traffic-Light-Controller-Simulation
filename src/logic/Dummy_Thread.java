@@ -25,9 +25,9 @@ public class Dummy_Thread implements Runnable{
 //            System.out.println("Dummy :"+ id + " print list: " + list.get(i));
 //        }
 //
-//        for(int i = 0; i < size2; i++) {
-//            System.out.println("Dummy :"+ id + " print list: " + list2.get(i));
-//        }
+        for(int i = 0; i < size2; i++) {
+            System.out.println("Dummy :"+ id + " x: " + list2.get(i).x + " y: " + list2.get(i).y + " direction: " + list2.get(i).direction);
+            }
 
 
     }
