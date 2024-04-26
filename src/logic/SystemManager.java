@@ -20,7 +20,7 @@ public class SystemManager implements Runnable{
     protected static int sleepDelay = 3000;
     private static int currentCars = 0;
     private static int maxNumCars = 100;
-    protected static int createVehicleProbability = 70;
+    protected static int createVehicleProbability = 75;
     protected static int createEMSProbability = 25;
     private static String direction[] = {"North", "South", "East", "West"};
     private double East_Lanes[];
@@ -118,7 +118,7 @@ public class SystemManager implements Runnable{
         xFINTX4 = size/1.25;
         y0INTX4 = (size*2)+(size/5);
         yFINTX4 = (size*2)+(size/1.25);
-        cyINTX4 = size/2;
+        cxINTX4 = size/2;
         cyINTX4 = (size*2)+(size/2);
 
 //Intersection 5
@@ -216,14 +216,14 @@ public class SystemManager implements Runnable{
         }
 
         if(EMSprobability < createEMSProbability){
-            //car = "EMS ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
-            idcar = new IdiotCar(carID, getDirection, startingX, startingY, row);
+            car = "EMS ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
+            idcar = new IdiotCar(carID, getDirection, startingX, startingY, size);
         }
         else{
-            //car = "Car ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
-            idcar = new IdiotCar(carID, getDirection, startingX, startingY, row);
+            car = "Car ID: " + carID + " direction: " + getDirection + " staringX: " + startingX + " startingY " + startingY;
+            idcar = new IdiotCar(carID, getDirection, startingX, startingY, size);
         }
-        //System.out.println(car);
+        System.out.println(car);
         //testCarList.add(car);
         testCars.add(idcar);
         Thread IDcar = new Thread(idcar);

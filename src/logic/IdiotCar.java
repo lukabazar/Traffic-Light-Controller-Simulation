@@ -12,12 +12,12 @@ public class IdiotCar implements Runnable {
     double y;
     int driveDistance = 10;
     int sleepTime = 1000;
-    public IdiotCar(int ID, String dir, double xCoor, double yCoor, int rows){
+    public IdiotCar(int ID, String dir, double xCoor, double yCoor, double Size){
         id = ID;
         direction = dir;
         x = xCoor;
         y = yCoor;
-        size = Screen.getPrimary().getBounds().getHeight() / (rows + 1);
+        size = Size;
     }
 
     private void drive(){
