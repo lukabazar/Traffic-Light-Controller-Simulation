@@ -26,6 +26,7 @@ public class TrafficGUI {
     private final Scene scene;
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
     public static ImageView[] images = new ImageView[6];
+    public Intersection[] intArray = new Intersection[6];
     private final Font ledFont = Font.loadFont(getClass().getResourceAsStream(
             "../fonts/advanced-led-board-7.regular.ttf"), screenSize.getHeight() / 1.33 / 32.5);
 
@@ -60,7 +61,7 @@ public class TrafficGUI {
         Random randy = new Random();
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
-        Intersection[] intArray = new Intersection[6];
+
         Intersection.LightColor[] colors = {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
         int k = 0;
         for(int i = 0; i < rows; i++) {
@@ -161,12 +162,14 @@ public class TrafficGUI {
     private StackPane getPopUp() {
         HBox horizontalPopUp = new HBox();
         horizontalPopUp.setSpacing(-1);
+        int k = 0;
         double size = screenSize.getHeight() / 1.33;
         for (int i = 0; i < 3; i++) {
             StackPane stackRoad = new StackPane();
             if(i % 2 != 0) {
                 stackRoad.getChildren().add(setImageView("grass.png", size));
-                stackRoad.getChildren().add(setImageView("intersection lights (three-quarter).png", size));
+                stackRoad.getChildren().add(setImageView(intArray[k].getImage(), size));
+                k++;
             }
             else {
                 stackRoad.getChildren().add(setImageView("grass zoom.png", size));

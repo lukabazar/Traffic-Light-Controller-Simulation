@@ -11,6 +11,7 @@ public class Intersection implements Runnable {
     private final long minLength = 4000; //minimum time spent during red or green light
     private long lightChangeTime; // time of previous light change
     private final int intersectionNumber; //
+    public String currentImage;
     private LightDirection northSouthDir; // direction of north, south lights
     private LightDirection eastWestDir; // direction fo east, west lights
     private LightColor northSouthColor; // color of the north and south lights
@@ -69,16 +70,20 @@ public class Intersection implements Runnable {
     private void setImages(){
         if (images != null) {
             if (eastWestColor == LightColor.GREEN && northSouthColor == LightColor.RED) {
-                images[intersectionNumber].setImage(new Image("greenRed.png"));
+                currentImage = "greenRed.png";
+                images[intersectionNumber].setImage(new Image(currentImage));
             }
             if (eastWestColor == LightColor.RED && northSouthColor == LightColor.GREEN) {
-                images[intersectionNumber].setImage(new Image("redgreen.png"));
+                currentImage = "redgreen.png";
+                images[intersectionNumber].setImage(new Image(currentImage));
             }
             if (eastWestColor == LightColor.RED && northSouthColor == LightColor.YELLOW) {
-                images[intersectionNumber].setImage(new Image("redyellow.png"));
+                currentImage = "redyellow.png";
+                images[intersectionNumber].setImage(new Image(currentImage));
             }
             if (eastWestColor == LightColor.YELLOW && northSouthColor == LightColor.RED) {
-                images[intersectionNumber].setImage(new Image("yellowred.png"));
+                currentImage = "yellowred.png";
+                images[intersectionNumber].setImage(new Image(currentImage));
             }
         }
     }
@@ -114,6 +119,9 @@ public class Intersection implements Runnable {
     }
     public LightColor getEWState(){
         return eastWestColor;
+    }
+    public String getImage(){
+        return currentImage;
     }
     public LightColor getNSState(){
         return northSouthColor;
