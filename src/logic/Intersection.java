@@ -11,12 +11,11 @@ public class Intersection implements Runnable {
     private final long minLength = 4000; //minimum time spent during red or green light
     private long lightChangeTime; // time of previous light change
     private final int intersectionNumber; //
-    public String currentImage;
     private LightDirection northSouthDir; // direction of north, south lights
     private LightDirection eastWestDir; // direction fo east, west lights
     private LightColor northSouthColor; // color of the north and south lights
     private LightColor eastWestColor; // color of east and west lights
-
+    public String currentImage;
     private ImageView[] images;
     private int eastWestAcc;
     private int northSouthAcc;
@@ -41,7 +40,6 @@ public class Intersection implements Runnable {
         this.eastWestAcc = 0; //traffic accumulator
         this.northSouthAcc = 0;
         this.images = TrafficGUI.images;
-
     }
 
     public enum LightColor {
@@ -74,7 +72,7 @@ public class Intersection implements Runnable {
                 images[intersectionNumber].setImage(new Image(currentImage));
             }
             if (eastWestColor == LightColor.RED && northSouthColor == LightColor.GREEN) {
-                currentImage = "redgreen.png";
+                currentImage ="redGreen.png";
                 images[intersectionNumber].setImage(new Image(currentImage));
             }
             if (eastWestColor == LightColor.RED && northSouthColor == LightColor.YELLOW) {
@@ -120,14 +118,14 @@ public class Intersection implements Runnable {
     public LightColor getEWState(){
         return eastWestColor;
     }
-    public String getImage(){
-        return currentImage;
-    }
     public LightColor getNSState(){
         return northSouthColor;
     }
     public int getID(){
         return intersectionNumber;
+    }
+    public String getImage(){
+        return currentImage;
     }
     public double[] getCoords(){
         return new double[]{x0INTX1,xFINTX1, y0INTX1, yFINTX1, cxINTX1, cyINTX1};
