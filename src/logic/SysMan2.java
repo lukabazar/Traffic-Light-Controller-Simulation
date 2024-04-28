@@ -32,7 +32,7 @@ public class SysMan2 implements Runnable{
 
     private CopyOnWriteArrayList<Thread> carThreads =
             new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<Intersection> intersectionThreads =
+    private CopyOnWriteArrayList<Thread> intersectionThreads =
             new CopyOnWriteArrayList<>();
 
 
@@ -54,17 +54,12 @@ public class SysMan2 implements Runnable{
 
                 Thread intersectionThread =
                         new Thread(intersectionList.get(id));
+                intersectionThreads.add(intersectionThread);
                 intersectionThread.start();
-//                ImageView imageView = TrafficGUI.setImageView("redgreen.png",
-//                                                              this.tileSize);
-//                TrafficGUI.intersectionImages[id] = imageView;
-                
                 id++;
             }
         }
     }
-
-
 
 
     private void createVehicle(){

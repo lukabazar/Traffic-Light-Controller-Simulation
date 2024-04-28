@@ -4,12 +4,12 @@ import javafx.scene.image.ImageView;
 
 import java.awt.*;
 
-public  class Vehicle implements Runnable {
+public  abstract class Vehicle implements Runnable {
     private Direction currentDir;
     private int speed = 0;
     private float transparency = 0;
     private boolean intersectionFlag = false;
-    private int minBufferDistance = 10;
+    private final int minBufferDistance = 10;
     private Point location = new Point();
     private Lane lane;
     private boolean running = false;
@@ -110,17 +110,11 @@ public  class Vehicle implements Runnable {
     }
 
 
-    public boolean move() {
-                return true;
+    public abstract boolean move();
 
-    }
 
-    @Override
-    public void run() {
-    }
+    public abstract void run();
 
-    public void stop() {
-
-    }
+    public abstract void stop();
 
 }
