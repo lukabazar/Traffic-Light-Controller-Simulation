@@ -167,28 +167,29 @@ public class Intersection implements Runnable {
 
             if (eastWestColor == LightColor.GREEN &&
                     northSouthColor == LightColor.RED) {
-                Platform.runLater(() -> {
-                    TrafficGUI.intersectionImages[intersectionNumber].setImage(new Image("greenRed.png"));
-                });
+
+                    images[intersectionNumber].setImage(new Image("greenRed" +
+                                                                          ".png"));
+
             }
             if (eastWestColor == LightColor.RED &&
                     northSouthColor == LightColor.GREEN) {
-                Platform.runLater(() -> {
-                TrafficGUI.intersectionImages[intersectionNumber].setImage(new Image(
+
+                images[intersectionNumber].setImage(new Image(
                         "redgreen.png"));
-                });
+
             }
             if (eastWestColor == LightColor.RED &&
                     northSouthColor == LightColor.YELLOW) {
-                Platform.runLater(() -> {
-                TrafficGUI.intersectionImages[intersectionNumber].setImage(new Image("redyellow.png"));
-                });
+
+                images[intersectionNumber].setImage(new Image("redyellow.png"));
+
             }
             if (eastWestColor == LightColor.YELLOW &&
                     northSouthColor == LightColor.RED) {
-                    Platform.runLater(() -> {
-                TrafficGUI.intersectionImages[intersectionNumber].setImage(new Image("yellowred.png"));
-            });
+
+                images[intersectionNumber].setImage(new Image("yellowred.png"));
+
             }
         }
     }
