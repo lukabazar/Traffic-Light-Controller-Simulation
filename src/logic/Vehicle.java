@@ -77,6 +77,12 @@ public  abstract class Vehicle implements Runnable {
         this.location = p;
     }
 
+    public void update(){
+        this.imageView.setX(this.location.x*tileSize/200);
+        this.imageView.setY(this.location.y*tileSize/200);
+
+    }
+
     public void setLane(Lane lane){
         this.lane = lane;
     }

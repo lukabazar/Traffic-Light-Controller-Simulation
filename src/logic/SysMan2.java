@@ -18,7 +18,7 @@ public class SysMan2 implements Runnable{
     protected static int sleepDelay = 3000;
     private static int currentCars = 0;
     private static int maxNumCars = 100;
-    protected static double createVehicleProbability = 0.55;
+    protected static double createVehicleProbability = 0.45;
     protected static double createEMSProbability = 0.25;
     private Random rand = new Random();
     private static Direction directions[] = {Direction.NORTH, Direction.SOUTH
@@ -40,6 +40,8 @@ public class SysMan2 implements Runnable{
     public SysMan2(){
         this.tileSize = TrafficGUI.getTileSize();
         createIntersections();
+        Thread thread = new Thread(this);
+        thread.start();
     }
 
 
@@ -63,6 +65,7 @@ public class SysMan2 implements Runnable{
 
 
     private void createVehicle(){
+        System.out.println("car creation");
         //RNG EMS vehicle creation.
         rand = new Random();
         double EMS_RNG = rand.nextDouble();
@@ -111,15 +114,22 @@ public class SysMan2 implements Runnable{
         }
         //System.out.println(car);
         carList.add(car);
+        Thread carThread = new Thread(car);
+
+        carThread.start();
+        System.out.println("car started?");
+
+        carThreads.add(carThread);
         currentCars++;
         carID++;
+
     }
 
     private void createDMS(){}
 
     private int RNGCarRoll(){
 
-        int NumOfCarsToCreate = 0;
+        int NumOfCarsToCreate = 1;
         int probability;
 
         while(true){
@@ -139,6 +149,7 @@ public class SysMan2 implements Runnable{
             }
         }
         //System.out.println("number of cars to make: " + NumOfCarsToCreate);
+        System.out.println(NumOfCarsToCreate);
         return NumOfCarsToCreate;
     }
 
@@ -159,7 +170,8 @@ public class SysMan2 implements Runnable{
 
     @Override
     public void run() {
-        int numCarCreate = 0;
+        System.out.println("sysman running");
+        int numCarCreate = 1;
         createIntersections();
         createDMS();
 

@@ -8,7 +8,7 @@ public enum Direction {
     EAST(new Point(1,0)),
     WEST(new Point(-1,0));
 
-    private Point deltaDirection = new Point();
+    private Point deltaDirection;
 
 
     Direction(Point point) {

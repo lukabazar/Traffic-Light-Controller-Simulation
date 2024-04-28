@@ -200,7 +200,10 @@ public class TrafficGUI {
     }
 
     public static void addCar(ImageView imageView){
-        vehiclePane.getChildren().add(imageView);
+        System.out.println("car was added to GUI");
+        Platform.runLater(() -> {
+            vehiclePane.getChildren().add(imageView);
+        });
     }
 
     public static void removeCar(ImageView imageView){
