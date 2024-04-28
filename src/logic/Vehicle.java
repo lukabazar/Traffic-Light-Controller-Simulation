@@ -1,5 +1,7 @@
 package logic;
 
+import javafx.scene.image.ImageView;
+
 import java.awt.*;
 
 public abstract class Vehicle implements Runnable {
@@ -9,7 +11,10 @@ public abstract class Vehicle implements Runnable {
     private boolean intersectionFlag = false;
     private int minBufferDistance = 10;
     private Point location = new Point();
+    private Lane lane;
     private boolean running = false;
+    ImageView imageView;
+    private double imageRotation;
 
     public Direction getDirection(){
         return currentDir;
@@ -49,6 +54,14 @@ public abstract class Vehicle implements Runnable {
 
     public void setPoint(Point p){
         this.location = p;
+    }
+
+    public void setLane(Lane lane){
+        this.lane = lane;
+    }
+
+    public Lane getLane(){
+        return this.lane;
     }
 
     public abstract boolean move();
