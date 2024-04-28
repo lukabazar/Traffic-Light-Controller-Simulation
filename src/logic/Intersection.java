@@ -1,6 +1,7 @@
 package logic;
 
 import GUI.TrafficGUI;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Pair;
@@ -132,6 +133,8 @@ public class Intersection implements Runnable {
                 this.westBarrier,
                 (int) center.getY() + 28));//westRight
 
+        setImages();
+
     }
 
     public enum LightColor {
@@ -159,22 +162,33 @@ public class Intersection implements Runnable {
     }
 
     private void setImages() {
+
         if (images != null) {
+
             if (eastWestColor == LightColor.GREEN &&
                     northSouthColor == LightColor.RED) {
-                images[intersectionNumber].setImage(new Image("greenRed.png"));
+                Platform.runLater(() -> {
+                    TrafficGUI.intersectionImages[intersectionNumber].setImage(new Image("greenRed.png"));
+                });
             }
             if (eastWestColor == LightColor.RED &&
                     northSouthColor == LightColor.GREEN) {
-                images[intersectionNumber].setImage(new Image("redgreen.png"));
+                Platform.runLater(() -> {
+                TrafficGUI.intersectionImages[intersectionNumber].setImage(new Image(
+                        "redgreen.png"));
+                });
             }
             if (eastWestColor == LightColor.RED &&
                     northSouthColor == LightColor.YELLOW) {
-                images[intersectionNumber].setImage(new Image("redyellow.png"));
+                Platform.runLater(() -> {
+                TrafficGUI.intersectionImages[intersectionNumber].setImage(new Image("redyellow.png"));
+                });
             }
             if (eastWestColor == LightColor.YELLOW &&
                     northSouthColor == LightColor.RED) {
-                images[intersectionNumber].setImage(new Image("yellowred.png"));
+                    Platform.runLater(() -> {
+                TrafficGUI.intersectionImages[intersectionNumber].setImage(new Image("yellowred.png"));
+            });
             }
         }
     }

@@ -12,6 +12,7 @@ import javafx.stage.WindowEvent;
 import logic.Car;
 import logic.Direction;
 import logic.Lane;
+import logic.SysMan2;
 
 import java.awt.*;
 
@@ -37,11 +38,13 @@ public class Main extends Application {
         TrafficGUI gui = new TrafficGUI(stackPane, scene, 3, 5);
 
         gui.setUp();
+
         Car tests = new Car(1,new Point(300,300), Direction.EAST, Lane.LEFT,
                 200);
 
         primaryStage.setScene(scene);
         primaryStage.show();
+        SysMan2 sysMan = new SysMan2();
         gui.looper();
     }
 }

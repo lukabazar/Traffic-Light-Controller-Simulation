@@ -62,7 +62,6 @@ public class TrafficGUI {
         this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33,
                                            SysMan2.intersectionList);
 
-
     }
 
 
@@ -94,6 +93,7 @@ public class TrafficGUI {
                         int rand = randy.nextInt(2);
                         interIndex++;
                         imageView = setImageView("redgreen.png", size);
+                        intersectionImages[interIndex] = imageView;
 
                         inter = false;
                     } else {

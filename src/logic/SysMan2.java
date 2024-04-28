@@ -39,7 +39,7 @@ public class SysMan2 implements Runnable{
 
     public SysMan2(){
         this.tileSize = TrafficGUI.getTileSize();
-
+        createIntersections();
     }
 
 
@@ -55,9 +55,9 @@ public class SysMan2 implements Runnable{
                 Thread intersectionThread =
                         new Thread(intersectionList.get(id));
                 intersectionThread.start();
-                ImageView imageView = TrafficGUI.setImageView("redgreen.png",
-                                                              this.tileSize);
-                TrafficGUI.intersectionImages[id] = imageView;
+//                ImageView imageView = TrafficGUI.setImageView("redgreen.png",
+//                                                              this.tileSize);
+//                TrafficGUI.intersectionImages[id] = imageView;
                 
                 id++;
             }
