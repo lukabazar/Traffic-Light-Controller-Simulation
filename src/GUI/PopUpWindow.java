@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import logic.Intersection;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import static GUI.TrafficGUI.setImageView;
 
 /**
@@ -34,16 +36,16 @@ public class PopUpWindow {
     private final double size;
     private final Font font;
     private final IntersectionGUI intersectionGUI;
-    private final Intersection[] intArray;
+    private final CopyOnWriteArrayList<Intersection> intersectionList;
 
     /**
      * Pop Up Window (For zoomed in intersection view)
      *
      * @param size Calculated size
      */
-    public PopUpWindow(double size, Intersection[] intArray) {
+    public PopUpWindow(double size, CopyOnWriteArrayList<Intersection> intersectionList) {
         this.size = size;
-        this.intArray = intArray;
+        this.intersectionList = intersectionList;
         this.font = Font.loadFont(getClass().getResourceAsStream(
                 "../fonts/advanced-led-board-7.regular.ttf"), this.size / 32.5);
         this.intersectionGUI = new IntersectionGUI();
@@ -62,25 +64,25 @@ public class PopUpWindow {
     }
 
     public void update(int index) {
-        if(intArray[index].getEWState().equals(Intersection.LightColor.RED)) {
+        if(intersectionList.get(index).getEWState().equals(Intersection.LightColor.RED)) {
             intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("light.png", Directions.SOUTH);
         }
-        if(intArray[index].getEWState().equals(Intersection.LightColor.YELLOW)) {
+        if(intersectionList.get(index).getEWState().equals(Intersection.LightColor.YELLOW)) {
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
         }
-        if(intArray[index].getNSState().equals(Intersection.LightColor.YELLOW)) {
+        if(intersectionList.get(index).getNSState().equals(Intersection.LightColor.YELLOW)) {
             intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.SOUTH);
         }
-        if(intArray[index].getEWState().equals(Intersection.LightColor.GREEN)) {
+        if(intersectionList.get(index).getEWState().equals(Intersection.LightColor.GREEN)) {
             intersectionGUI.updateRegularLight("light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);

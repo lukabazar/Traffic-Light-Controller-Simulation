@@ -16,7 +16,7 @@ public  class Vehicle implements Runnable {
     private ImageView imageView;
     private double imageRotation;
     private int maxSpeed;
-    private int tileSize;
+    private double tileSize;
     private int id;
 
 
@@ -29,11 +29,11 @@ public  class Vehicle implements Runnable {
     }
 
 
-    public int getTileSize(){
+    public double getTileSize(){
         return this.tileSize;
     }
 
-    public void setTileSize(int tileSize){
+    public void setTileSize(double tileSize){
         this.tileSize = tileSize;
     }
 

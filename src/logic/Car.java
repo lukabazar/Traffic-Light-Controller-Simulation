@@ -12,7 +12,7 @@ public class Car extends Vehicle {
     private boolean running;
 
 
-    public Car(int id, Point p, Direction dir, Lane lane, int tileSize) {
+    public Car(int id, Point p, Direction dir, Lane lane, double tileSize) {
         this.setId(id);
         this.setLocation(p);
         this.setDirection(dir);

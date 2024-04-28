@@ -18,6 +18,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import logic.Intersection;
+import logic.SysMan2;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -34,13 +35,12 @@ public class TrafficGUI {
     private static Pane vehiclePane;
     private final Scene scene;
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
-    public static ImageView[] images = new ImageView[6];
+    public static ImageView[] intersectionImages = new ImageView[6];
     private final Stage popUp = new Stage();
     private final int rows;
     private final int cols;
     private int currentClicked = 0;
     private final PopUpWindow popUpWindow;
-    private final Intersection[] intArray = new Intersection[6];
     ImageView imageView1;
     ImageView imageView2;
     static double size;
@@ -59,7 +59,8 @@ public class TrafficGUI {
         this.scene = scene;
         this.rows = rows;
         this.cols = cols;
-        this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33, intArray);
+        this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33,
+                                           SysMan2.intersectionList);
 
 
     }
@@ -92,15 +93,8 @@ public class TrafficGUI {
                     if (inter) {
                         int rand = randy.nextInt(2);
                         interIndex++;
-                        intArray[interIndex] =
-                                new Intersection(interIndex, 1, 2, 3, 4,
-                                                 5, 6, colors[rand],
-                                                 colors[1 - rand]);
-                        Thread intersectionThread =
-                                new Thread(intArray[interIndex]);
-                        intersectionThread.start();
                         imageView = setImageView("redgreen.png", size);
-                        images[interIndex] = imageView;
+
                         inter = false;
                     } else {
                         imageView =

@@ -1,7 +1,10 @@
 package logic;
 
+import javafx.util.Pair;
+
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Intersection2 {
 
@@ -11,6 +14,7 @@ public class Intersection2 {
     private int northStop, southStop, eastStop, westStop;
     private int northBarrier, southBarrier, eastBarrier, westBarrier;
     private ArrayList<Point> exits = new ArrayList<>();
+    private ArrayList<Point> spawns = new ArrayList<>();
     private int id;
 
 
@@ -28,7 +32,33 @@ public class Intersection2 {
         this.eastBarrier =(int) center.getX() +39;
         this.westBarrier =(int) center.getX() -40;
 
+
+        // adding SPAWNS in clockwise order, important for future indexed get(i)
+        // NORTH, EAST, SOUTH, WEST
+
+        this.spawns.add(new Point(new Point((int) center.getX() - 30,
+                                               (int) center.getY() - 110)));
+        this.spawns.add(new Point(new Point((int) center.getX() - 10,
+                                              (int) center.getY() - 110)));
+
+        this.spawns.add(new Point(new Point((int) center.getX() + 110,
+                                              (int) center.getY() - 30)));
+        this.spawns.add(new Point(new Point((int) center.getX() + 110,
+                                             (int) center.getY() - 10)));
+
+        this.spawns.add(new Point(new Point((int) center.getX() + 28,
+                                               (int) center.getY() + 110)));
+        this.spawns.add(new Point(new Point((int) center.getX() + 9,
+                                              (int) center.getY() + 110)));
+
+        this.spawns.add(new Point(new Point((int) center.getX() - 110,
+                                              (int) center.getY() + 28)));
+        this.spawns.add(new Point(new Point((int) center.getX() - 110,
+                                             (int) center.getY() + 9)));
+
+
         // adding EXITS in clockwise order, important for future indexed get(i)
+        // NORTH, EAST, SOUTH, WEST
         this.exits.add(new Point( (int)center.getX() + 9,
                                     this.northBarrier ));//northLeft
         this.exits.add(new Point((int) center.getX() + 28,
@@ -48,8 +78,6 @@ public class Intersection2 {
                                    (int) center.getY() + 9 ));//westLeft
         this.exits.add(new Point( this.westBarrier,
                                     (int) center.getY() + 28));//westRight
-
-
 
     }
 
@@ -79,48 +107,88 @@ public class Intersection2 {
         return this.westBarrier;
     }
 
+
+
     // Parameter: dir = current direction of incoming car
     // Returns destination point for Car
-    public Point getLeftTurn(Direction dir){
+    public Pair<Point, Lane> getSpawn(Direction dir){
+        ArrayList<Point> temp = new ArrayList<>();
+        Lane tempLane;
+        Random random = new Random();
+        int choice = random.nextInt(2);
+        if (choice == 0){
+            tempLane = Lane.RIGHT;
+        } else {
+            tempLane = Lane.LEFT;
+        }
         switch (dir) {
-            case NORTH:
+            case NORTH -> {
+                temp.add(exits.get(4));
+                temp.add(exits.get(5));
                 // code block
-                return exits.get(6);
-            case SOUTH:
+                return new Pair<>(temp.get(choice), tempLane);
+            }
+            case SOUTH -> {
+                temp.add(exits.get(0));
+                temp.add(exits.get(1));
                 // code block
-                return exits.get(2);
-
-            case EAST:
+                return new Pair<>(temp.get(choice), tempLane);
+            }
+            case EAST -> {
+                temp.add(exits.get(6));
+                temp.add(exits.get(7));
                 // code block
-                return exits.get(0);
-            case WEST:
+                return new Pair<>(temp.get(choice), tempLane);
+            }
+            case WEST -> {
+                temp.add(exits.get(2));
+                temp.add(exits.get(3));
                 // code block
-                return exits.get(4);
-            // add more cases as needed
+                return new Pair<>(temp.get(choice), tempLane);
+            }
         }
         return null;
 
     }
 
     // Parameter: dir = current direction of incoming car
-    public Point getRightTurn(Direction dir){
-        switch (dir) {
-            case NORTH:
-                // code block
-                return exits.get(3);
-            case SOUTH:
-                // code block
-                return exits.get(7);
-
-            case EAST:
-                // code block
-                return exits.get(5);
-            case WEST:
-                // code block
-                return exits.get(1);
+    // Returns destination point for Car
+    public Point getLeftTurn(Direction dir){
+        return switch (dir) {
+            case NORTH ->
+                    // code block
+                    exits.get(6);
+            case SOUTH ->
+                    // code block
+                    exits.get(2);
+            case EAST ->
+                    // code block
+                    exits.get(0);
+            case WEST ->
+                    // code block
+                    exits.get(4);
             // add more cases as needed
-        }
-        return null;
+        };
+
+    }
+
+    // Parameter: dir = current direction of incoming car
+    public Point getRightTurn(Direction dir){
+        return switch (dir) {
+            case NORTH ->
+                    // code block
+                    exits.get(3);
+            case SOUTH ->
+                    // code block
+                    exits.get(7);
+            case EAST ->
+                    // code block
+                    exits.get(5);
+            case WEST ->
+                    // code block
+                    exits.get(1);
+            // add more cases as needed
+        };
     }
 
 }
