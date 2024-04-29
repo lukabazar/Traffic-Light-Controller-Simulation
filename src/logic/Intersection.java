@@ -42,6 +42,49 @@ public class Intersection implements Runnable {
     private int eastWestAcc;
     private int northSouthAcc;
 
+    public LightColor getEWState() {
+        return eastWestColor;
+    }
+
+    public LightColor getNSState() {
+        return northSouthColor;
+    }
+
+    public int getID() {
+        return intersectionNumber;
+    }
+
+    public int getNorthStop() {
+        return this.northStop;
+    }
+
+    public int getSouthStop() {
+        return this.southStop;
+    }
+
+    public int getEastStop() {
+        return this.eastStop;
+    }
+
+    public int getWestStop() {
+        return this.westStop;
+    }
+
+    public int getNorthBarrier() {
+        return this.northBarrier;
+    }
+
+    public int getSouthBarrier() {
+        return this.southBarrier;
+    }
+
+    public int getEastBarrier() {
+        return this.eastBarrier;
+    }
+
+    public int getWestBarrier() {
+        return this.westBarrier;
+    }
 
     // assuming that there will be some sort of number assigned to an
     // intersection so that we can differentiate btwn them
@@ -105,7 +148,6 @@ public class Intersection implements Runnable {
         this.spawns.add(new Point(new Point(
                 (int) center.getX() - 110,
                 (int) center.getY() + 9)));
-
 
         // adding EXITS in clockwise order, important for future indexed get(i)
         // NORTH, EAST, SOUTH, WEST
@@ -247,18 +289,6 @@ public class Intersection implements Runnable {
         lightChangeTime = System.currentTimeMillis();
     }
 
-    public LightColor getEWState() {
-        return eastWestColor;
-    }
-
-    public LightColor getNSState() {
-        return northSouthColor;
-    }
-
-    public int getID() {
-        return intersectionNumber;
-    }
-
     // changes state of intersection based on time, will call changeLight method
     private void updateIntersection() {
         long currentTime = System.currentTimeMillis();
@@ -300,39 +330,6 @@ public class Intersection implements Runnable {
             lightChangeTime = System.currentTimeMillis();
         }
 
-    }
-
-
-    public int getNorthStop() {
-        return this.northStop;
-    }
-
-    public int getSouthStop() {
-        return this.southStop;
-    }
-
-    public int getEastStop() {
-        return this.eastStop;
-    }
-
-    public int getWestStop() {
-        return this.westStop;
-    }
-
-    public int getNorthBarrier() {
-        return this.northBarrier;
-    }
-
-    public int getSouthBarrier() {
-        return this.southBarrier;
-    }
-
-    public int getEastBarrier() {
-        return this.eastBarrier;
-    }
-
-    public int getWestBarrier() {
-        return this.westBarrier;
     }
 
     // Parameter: dir = current direction of incoming car
