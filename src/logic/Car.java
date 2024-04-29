@@ -22,6 +22,7 @@ public class Car extends Vehicle {
 
 
     public Car(int id, Point p, Direction dir, Lane lane, double tileSize) {
+        this.state = State.ROAD;
         this.setId(id);
         this.setLocation(p);
         this.setDirection(dir);
@@ -42,23 +43,41 @@ public class Car extends Vehicle {
     // returns true if the car moves
     public boolean move() {
         Point tempPoint = this.getLocation();
+
+        switch (this.state) {
+            case ROAD:
+                if (tempPoint.x < -50 || tempPoint.x > 1050 || tempPoint.y < -50 || tempPoint.y > 650){
+                    running = false;
+                    this.setLocation(new Point(-100,-100));
+                    return true;
+                }
+
+                Point delta = this.getDirection().getDeltaDirection();
+                int x = tempPoint.x + delta.x*this.getSpeed();
+                int y = tempPoint.y + delta.y*this.getSpeed();
+
+                this.setLocation(new Point(x,y));
+
+                return true;
+            case BUFFER:
+
+                return true;
+
+            case STRAIGHT:
+
+                return true;
+            case LEFT_TURN:
+
+                return true;
+            case RIGHT_TURN:
+
+                return true;
+        }
+
+
         //System.out.println(getId() + "" +tempPoint);
 
-        if (tempPoint.x < -100 || tempPoint.x > 1100 || tempPoint.y < -100 || tempPoint.y > 700){
-            running = false;
-            this.setLocation(new Point(-100,-100));
-            this.GUIupdate();
 
-
-            return true;
-
-        }
-        Point delta = this.getDirection().getDeltaDirection();
-        int x = tempPoint.x + delta.x*this.getSpeed();
-        int y = tempPoint.y + delta.y*this.getSpeed();
-
-        this.setLocation(new Point(x,y));
-        this.GUIupdate();
 
 
         return true;
@@ -67,7 +86,9 @@ public class Car extends Vehicle {
     @Override
     public void run() {
         while (running) {
-            move();
+            if (move()){
+                this.GUIupdate();
+            }
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

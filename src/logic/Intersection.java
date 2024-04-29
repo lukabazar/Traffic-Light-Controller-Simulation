@@ -195,6 +195,10 @@ public class Intersection implements Runnable {
         EASTWEST
     }
 
+    public Point getCenter(){
+        return this.center;
+    }
+
     @Override
     public void run() {
         while (true) {

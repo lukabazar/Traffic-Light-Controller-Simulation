@@ -10,7 +10,7 @@ public  abstract class Vehicle implements Runnable {
     private int speed = 5;
     private float transparency = 0;
     private boolean intersectionFlag = false;
-    private final int minBufferDistance = 10;
+    final double minBufferDistance = 10;
     private Point location = new Point();
     private Lane lane;
     private boolean running = false;
@@ -19,6 +19,8 @@ public  abstract class Vehicle implements Runnable {
     private int maxSpeed;
     private double tileSize;
     private int id;
+    private int lastIntersectionID = -1;
+    private int currentIntersectionID = -1;
 
 
     public int getId(){
@@ -127,5 +129,19 @@ public  abstract class Vehicle implements Runnable {
     public abstract void run();
 
     public abstract void stop();
+
+    public void checkIntersections(){
+        Point temp;
+        for (Intersection inter: SysMan2.intersectionList){
+            if (inter.getID() != this.lastIntersectionID){
+                temp = inter.getCenter();
+                if (temp.distance(this.location) < 125){
+                    this.currentIntersectionID = inter.getID();
+                    return;
+                }
+            }
+
+        }
+    }
 
 }
