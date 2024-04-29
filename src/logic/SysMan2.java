@@ -52,8 +52,12 @@ public class SysMan2 implements Runnable{
             for (int j = 0; j < 5; j += 2) {
                 intersectionList.add(new Intersection(
                         id,
-                        new Point((i * 200) + 100, (j * 200) + 100))
+                        new Point((j * 200) + 100, (i * 200) + 100))
                 );
+                int x1 = (j * 200) + 100;
+                int y1 = (i * 200) + 100;
+                System.out.println("intsrsect " + x1 + " " + y1);
+                System.out.println(intersectionList.get(id).getID());
 
                 Thread intersectionThread =
                         new Thread(intersectionList.get(id));
@@ -76,31 +80,37 @@ public class SysMan2 implements Runnable{
         int startingY = 0;
         Direction dir = directions[RNG];
 
-        ArrayList<Intersection> tempList = new ArrayList<>();
+        ArrayList<Integer> tempList = new ArrayList<>();
+        tempList.clear();
         Pair<Point,Lane> spawn;
+
+        System.out.println("switch dir:" + dir);
 
         switch (dir) {
             case NORTH:
-                    tempList.add(intersectionList.get(3));
-                    tempList.add(intersectionList.get(4));
-                    tempList.add(intersectionList.get(5));
+                    tempList.add(3);
+                    tempList.add(4);
+                    tempList.add(5);
                     break;
             case SOUTH:
-                    tempList.add(intersectionList.get(0));
-                    tempList.add(intersectionList.get(1));
-                    tempList.add(intersectionList.get(2));
+                    tempList.add(0);
+                    tempList.add(1);
+                    tempList.add(2);
                     break;
             case EAST:
-                    tempList.add(intersectionList.get(0));
-                    tempList.add(intersectionList.get(3));
+                    tempList.add(0);
+                    tempList.add(3);
                     break;
             case WEST:
-                    tempList.add(intersectionList.get(2));
-                    tempList.add(intersectionList.get(5));
+                    tempList.add(2);
+                    tempList.add(5);
         };
 
+        System.out.println("tempsize: " + tempList.size());
+        System.out.println(tempList);
         RNG = rand.nextInt(tempList.size());
-        spawn = tempList.get(RNG).getSpawn(dir);
+        System.out.println("ID: " + intersectionList.get(tempList.get(RNG)).getID());
+        spawn = intersectionList.get(tempList.get(RNG)).getSpawn(dir);
 
         Car car;
         if(EMS_RNG < createEMSProbability){
@@ -112,6 +122,9 @@ public class SysMan2 implements Runnable{
             car = new Car(carID, spawn.getKey(), dir, spawn.getValue(),
                               tileSize);
         }
+        System.out.println("direction: "+ dir);
+        System.out.println(spawn.getKey());
+        System.out.println("ring" + RNG);
         //System.out.println(car);
         carList.add(car);
         Thread carThread = new Thread(car);
@@ -179,7 +192,7 @@ public class SysMan2 implements Runnable{
                 numCarCreate = RNGCarRoll();
                 for(int i = 0; i < numCarCreate; i++){
                     createVehicle();
-                    Thread.sleep(500);
+                    Thread.sleep(2000);
                 }
                 //removeVehicles();
                 Thread.sleep(sleepDelay);
