@@ -329,7 +329,7 @@ public class SystemManager implements Runnable{
                     TimeUnit.SECONDS.sleep(3);
                 }
                 for(int j = 0; j < cars.size(); j++){
-                    removeVehicles();
+                    //removeVehicles();
                 }
                 Thread.sleep(sleepDelay);
             } catch (InterruptedException e) {

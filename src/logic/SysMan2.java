@@ -25,7 +25,7 @@ public class SysMan2 implements Runnable{
             , Direction.EAST,
             Direction.WEST};
 
-    protected static CopyOnWriteArrayList<Car> carList =
+    public static CopyOnWriteArrayList<Car> carList =
             new CopyOnWriteArrayList<>();
     public static CopyOnWriteArrayList<Intersection> intersectionList =
             new CopyOnWriteArrayList<>();
@@ -39,7 +39,7 @@ public class SysMan2 implements Runnable{
 
     public SysMan2(){
         this.tileSize = TrafficGUI.getTileSize();
-        createIntersections();
+        //createIntersections();
         Thread thread = new Thread(this);
         thread.start();
     }
@@ -181,9 +181,9 @@ public class SysMan2 implements Runnable{
                 numCarCreate = RNGCarRoll();
                 for(int i = 0; i < numCarCreate; i++){
                     createVehicle();
-                    TimeUnit.SECONDS.sleep(3);
+                    Thread.sleep(500);
                 }
-                removeVehicles();
+                //removeVehicles();
                 Thread.sleep(sleepDelay);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
