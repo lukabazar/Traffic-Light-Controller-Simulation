@@ -172,8 +172,8 @@ public class TrafficGUI {
 
         StackPane roads = new StackPane(vBox);
         // TODO Vroom vroom
-        roads.getChildren().add(setImageView("car_1.png", size * 0.133));
-        roads.getChildren().add(setImageView("ambulance.png", size * 0.133));
+        //roads.getChildren().add(setImageView("car_1.png", size * 0.133));
+        //roads.getChildren().add(setImageView("ambulance.png", size * 0.133));
         borderPane.setCenter(roads);
         //discard roads usage, sorry i was trying to make it work, but it was
         // always centered and being weird if not centered

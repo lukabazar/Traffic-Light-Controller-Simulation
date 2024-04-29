@@ -36,7 +36,7 @@ public class Car extends Vehicle {
         Point tempPoint = this.getLocation();
         //System.out.println(getId() + "" +tempPoint);
 
-        if (tempPoint.x < -100 || tempPoint.x > 1000 || tempPoint.y < -100 || tempPoint.y > 700){
+        if (tempPoint.x < -100 || tempPoint.x > 1100 || tempPoint.y < -100 || tempPoint.y > 700){
             running = false;
             this.setLocation(new Point(-100,-100));
             this.update();

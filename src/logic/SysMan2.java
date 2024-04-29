@@ -15,7 +15,7 @@ public class SysMan2 implements Runnable{
 
     private double tileSize;
     private static int carID = 0;
-    protected static int sleepDelay = 3000;
+    protected static int sleepDelay = 1000;
     private static int currentCars = 0;
     private static int maxNumCars = 100;
     protected static double createVehicleProbability = 0.45;
@@ -56,8 +56,6 @@ public class SysMan2 implements Runnable{
                 );
                 int x1 = (j * 200) + 100;
                 int y1 = (i * 200) + 100;
-                System.out.println("intsrsect " + x1 + " " + y1);
-                System.out.println(intersectionList.get(id).getID());
 
                 Thread intersectionThread =
                         new Thread(intersectionList.get(id));
@@ -75,16 +73,16 @@ public class SysMan2 implements Runnable{
         double EMS_RNG = rand.nextDouble();
         int RNG;
 
-        RNG = rand.nextInt(4);
+        RNG = rand.nextInt(directions.length);
         int startingX = 0;
         int startingY = 0;
         Direction dir = directions[RNG];
+        System.out.println(dir);
 
         ArrayList<Integer> tempList = new ArrayList<>();
         tempList.clear();
         Pair<Point,Lane> spawn;
 
-        System.out.println("switch dir:" + dir);
 
         switch (dir) {
             case NORTH:
@@ -106,10 +104,7 @@ public class SysMan2 implements Runnable{
                     tempList.add(5);
         };
 
-        System.out.println("tempsize: " + tempList.size());
-        System.out.println(tempList);
         RNG = rand.nextInt(tempList.size());
-        System.out.println("ID: " + intersectionList.get(tempList.get(RNG)).getID());
         spawn = intersectionList.get(tempList.get(RNG)).getSpawn(dir);
 
         Car car;
@@ -122,10 +117,8 @@ public class SysMan2 implements Runnable{
             car = new Car(carID, spawn.getKey(), dir, spawn.getValue(),
                               tileSize);
         }
-        System.out.println("direction: "+ dir);
-        System.out.println(spawn.getKey());
-        System.out.println("ring" + RNG);
-        //System.out.println(car);
+
+
         carList.add(car);
         Thread carThread = new Thread(car);
 
@@ -192,7 +185,7 @@ public class SysMan2 implements Runnable{
                 numCarCreate = RNGCarRoll();
                 for(int i = 0; i < numCarCreate; i++){
                     createVehicle();
-                    Thread.sleep(2000);
+                    Thread.sleep(100);
                 }
                 //removeVehicles();
                 Thread.sleep(sleepDelay);
