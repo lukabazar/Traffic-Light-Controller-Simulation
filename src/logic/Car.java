@@ -147,6 +147,31 @@ public class Car extends Vehicle {
                     this.setSpeed(new_speed);
                 }
 
+
+                LightQuery query = LightQuery.GREEN;
+
+                switch (query) {
+                    case GREEN -> {
+
+                    }
+                    case YELLOW -> {
+
+                    }
+                    case RED -> {
+
+                    }
+                    case LEFT_GREEN -> {
+
+                    }
+                    case LEFT_YELLOW -> {
+
+                    }
+                    case LEFT_RED -> {
+
+                    }
+
+                }
+
                 Point delta = this.getDirection().getDeltaDirection();
                 int x = (int) (tempPoint.x + delta.x*this.getSpeed());
                 int y = (int) (tempPoint.y + delta.y*this.getSpeed());
