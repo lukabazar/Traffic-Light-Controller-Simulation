@@ -52,6 +52,17 @@ public class Car extends Vehicle {
                     return true;
                 }
 
+                if (getCurrentIntersectionID() == -1) {
+                    if (this.checkIntersections()) {
+                        // queryIntersection
+
+                    }
+                } else {
+                    //query intersection
+                }
+
+                // switch case query
+
                 Point delta = this.getDirection().getDeltaDirection();
                 int x = tempPoint.x + delta.x*this.getSpeed();
                 int y = tempPoint.y + delta.y*this.getSpeed();
