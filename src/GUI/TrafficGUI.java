@@ -31,6 +31,7 @@ import java.util.Random;
 public class TrafficGUI {
 
     private final BorderPane borderPane;
+    public StackPane stackPaneIntersection;
     private final StackPane stackPane;
     private static Pane vehiclePane;
     private final Scene scene;
@@ -117,7 +118,7 @@ public class TrafficGUI {
 
                 ImageView grass = setImageView("grassTrees.png", size);
 
-                StackPane stackPane = new StackPane(grass, imageView);
+                stackPaneIntersection = new StackPane(grass, imageView);
                 Circle overlay = new Circle(size / 2 - 5);
                 overlay.setFill(Color.LIGHTBLUE);
                 overlay.setOpacity(0.33);
@@ -128,7 +129,7 @@ public class TrafficGUI {
 
                 // For the popup window
                 int finalInterIndex = interIndex;
-                stackPane.setOnMouseClicked((MouseEvent e) -> {
+                stackPaneIntersection.setOnMouseClicked((MouseEvent e) -> {
                     if (popUp.isShowing()) {
                         popUp.close();
                     }
@@ -145,7 +146,7 @@ public class TrafficGUI {
                 });
 
                 // Overlay and cursor
-                stackPane.setOnMouseEntered((MouseEvent e) -> {
+                stackPaneIntersection.setOnMouseEntered((MouseEvent e) -> {
                     if (finalI % 2 == 0 && !finalInter) {
                         stackPane.getChildren().add(overlay);
                         scene.setCursor(Cursor.HAND);
@@ -153,12 +154,12 @@ public class TrafficGUI {
                 });
 
                 // Remove overlay and cursor
-                stackPane.setOnMouseExited((MouseEvent e) -> {
-                    stackPane.getChildren().remove(overlay);
+                stackPaneIntersection.setOnMouseExited((MouseEvent e) -> {
+                    stackPaneIntersection.getChildren().remove(overlay);
                     scene.setCursor(Cursor.DEFAULT);
                 });
 
-                hBox.getChildren().add(stackPane);
+                hBox.getChildren().add(stackPaneIntersection);
             }
             hBox.setAlignment(Pos.CENTER);
             vBox.getChildren().add(hBox);
