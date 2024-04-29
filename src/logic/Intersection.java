@@ -4,6 +4,7 @@ import GUI.TrafficGUI;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.util.Pair;
 
 import java.awt.*;
@@ -162,7 +163,7 @@ public class Intersection implements Runnable {
     }
 
     private void setImages() {
-
+        //StackPane stackPane = TrafficGUI.stackPaneIntersection;
         if (images != null) {
 
             if (eastWestColor == LightColor.GREEN &&
