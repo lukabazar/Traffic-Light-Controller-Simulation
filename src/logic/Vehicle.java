@@ -1,5 +1,6 @@
 package logic;
 
+import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 
 import java.awt.*;
@@ -78,8 +79,12 @@ public  abstract class Vehicle implements Runnable {
     }
 
     public void update(){
+        Platform.runLater(() -> {
+
+
         this.imageView.setX(this.location.x*tileSize/200);
         this.imageView.setY(this.location.y*tileSize/200);
+        });
 
     }
 

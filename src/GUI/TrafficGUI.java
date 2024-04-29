@@ -235,10 +235,10 @@ public class TrafficGUI {
                 }
 
                 // Update the position of imageView1
-                Platform.runLater(() -> {
-                    imageView1.setLayoutX(x[0]); // Using x[0]
-                    imageView1.setLayoutY(y);
-                });
+//                Platform.runLater(() -> {
+//                    imageView1.setLayoutX(x[0]); // Using x[0]
+//                    imageView1.setLayoutY(y);
+//                });
 
                 try {
                     Thread.sleep(100); // Sleep for 1 second before updating

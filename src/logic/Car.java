@@ -38,6 +38,12 @@ public class Car extends Vehicle {
 
         if (tempPoint.x < 50 || tempPoint.x > 800 || tempPoint.y < 30 || tempPoint.y > 500){
             running = false;
+            this.setLocation(new Point(-100,-100));
+            this.update();
+
+
+            return true;
+
         }
         Point delta = this.getDirection().getDeltaDirection();
         int x = tempPoint.x + delta.x*5;
@@ -93,8 +99,8 @@ public class Car extends Vehicle {
         }
         imageView.setTranslateX(-getTileSize() * 0.133 / 4);
         imageView.setTranslateY(-getTileSize() * 0.133 / 2);
-        imageView.setX(getLocation().getX());
-        imageView.setY(getLocation().getY());
+        imageView.setX(getLocation().getX()*getTileSize()/200);
+        imageView.setY(getLocation().getY()*getTileSize()/200);
         return imageView;
     }
 
