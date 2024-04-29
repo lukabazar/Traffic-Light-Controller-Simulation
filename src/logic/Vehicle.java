@@ -68,6 +68,10 @@ public  abstract class Vehicle implements Runnable {
         return this.intersectionFlag;
     }
 
+    public double getMinBufferDistance() {
+        return this.minBufferDistance;
+    }
+
     public void flipIntersectionFlag(){
         this.intersectionFlag = !this.intersectionFlag;
     }
