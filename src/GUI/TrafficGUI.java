@@ -37,10 +37,6 @@ public class TrafficGUI {
     private final StackPane stackPane;
     private static Pane vehiclePane;
     private final Scene scene;
-    public static CopyOnWriteArrayList<Intersection> intersectionList =
-            new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<Thread> intersectionThreads =
-            new CopyOnWriteArrayList<>();
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
     public static ImageView[] intersectionImages = new ImageView[6];
     private final Stage popUp = new Stage();
@@ -48,8 +44,6 @@ public class TrafficGUI {
     private final int cols;
     private int currentClicked = 0;
     private final PopUpWindow popUpWindow;
-    ImageView imageView1;
-    ImageView imageView2;
     static double size;
 
     /**
@@ -156,8 +150,7 @@ public class TrafficGUI {
                         scene.setCursor(Cursor.HAND);
                     }
                 });
-
-//                 Remove overlay and cursor
+                //  Remove overlay and cursor
                 stackPane.setOnMouseExited((MouseEvent e) -> {
                     stackPane.getChildren().remove(overlay);
                     scene.setCursor(Cursor.DEFAULT);
@@ -172,32 +165,11 @@ public class TrafficGUI {
 
         StackPane roads = new StackPane(vBox);
         // TODO Vroom vroom
-        //roads.getChildren().add(setImageView("car_1.png", size * 0.133));
-        //roads.getChildren().add(setImageView("ambulance.png", size * 0.133));
         borderPane.setCenter(roads);
-        //discard roads usage, sorry i was trying to make it work, but it was
-        // always centered and being weird if not centered
 
         vehiclePane = new Pane();
         vehiclePane.setPrefSize(screenSize.getWidth(), screenSize.getHeight());
         vehiclePane.setMouseTransparent(true);
-
-        // Create ImageView objects and set their positions
-        imageView1 = setImageView("car_1.png", size * 0.133);
-        imageView1.setTranslateX(-size * 0.133 / 4);
-        imageView1.setTranslateY(-size * 0.133 / 2); //testing here
-        imageView1.setRotate(45);
-
-
-        imageView1.setLayoutX((900) * (size / 200));
-        imageView1.setLayoutY(100 * (size / 200));
-
-
-        imageView2 = setImageView("car_1.png", size * 0.133);
-        imageView2.setLayoutX(300);
-        imageView2.setLayoutY(100);
-
-        vehiclePane.getChildren().addAll(imageView1);
 
         this.stackPane.getChildren().addAll(borderPane, vehiclePane);
 
