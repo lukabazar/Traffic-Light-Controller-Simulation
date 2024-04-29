@@ -17,11 +17,15 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import logic.Car;
 import logic.Intersection;
+import logic.SysMan2;
 
+import java.awt.*;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Main class for the GUI
@@ -33,14 +37,17 @@ public class TrafficGUI {
     private final StackPane stackPane;
     private static Pane vehiclePane;
     private final Scene scene;
+    public static CopyOnWriteArrayList<Intersection> intersectionList =
+            new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<Thread> intersectionThreads =
+            new CopyOnWriteArrayList<>();
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
-    public static ImageView[] images = new ImageView[6];
+    public static ImageView[] intersectionImages = new ImageView[6];
     private final Stage popUp = new Stage();
     private final int rows;
     private final int cols;
     private int currentClicked = 0;
     private final PopUpWindow popUpWindow;
-    private final Intersection[] intArray = new Intersection[6];
     ImageView imageView1;
     ImageView imageView2;
     static double size;
@@ -59,8 +66,7 @@ public class TrafficGUI {
         this.scene = scene;
         this.rows = rows;
         this.cols = cols;
-        this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33, intArray);
-
+        this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33);
 
     }
 
@@ -73,12 +79,11 @@ public class TrafficGUI {
         stackPane.setMinSize(5 * size, 3 * size);
         stackPane.setMaxSize(5 * size, 3 * size);
         VBox vBox = new VBox();
-        int interIndex = -1;
+        int interIndex = 0;
 
         Random randy = new Random();
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
-        //Intersection[] intArray = new Intersection[6];
         Intersection.LightColor[] colors =
                 {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
         for (int i = 0; i < rows; i++) {
@@ -91,16 +96,10 @@ public class TrafficGUI {
                 if (i % 2 == 0) {
                     if (inter) {
                         int rand = randy.nextInt(2);
-                        interIndex++;
-                        intArray[interIndex] =
-                                new Intersection(interIndex, 1, 2, 3, 4,
-                                                 5, 6, colors[rand],
-                                                 colors[1 - rand]);
-                        Thread intersectionThread =
-                                new Thread(intArray[interIndex]);
-                        intersectionThread.start();
+
                         imageView = setImageView("redgreen.png", size);
-                        images[interIndex] = imageView;
+                        intersectionImages[interIndex] = imageView;
+                        interIndex++;
                         inter = false;
                     } else {
                         imageView =
@@ -133,7 +132,7 @@ public class TrafficGUI {
                 Color green = Color.web("0x468D34", 1.0);
 
                 // For the popup window
-                int finalInterIndex = interIndex;
+                int finalInterIndex = interIndex - 1;
                 stackPane.setOnMouseClicked((MouseEvent e) -> {
                     if (popUp.isShowing()) {
                         popUp.close();
@@ -158,7 +157,7 @@ public class TrafficGUI {
                     }
                 });
 
-                // Remove overlay and cursor
+//                 Remove overlay and cursor
                 stackPane.setOnMouseExited((MouseEvent e) -> {
                     stackPane.getChildren().remove(overlay);
                     scene.setCursor(Cursor.DEFAULT);
@@ -173,8 +172,8 @@ public class TrafficGUI {
 
         StackPane roads = new StackPane(vBox);
         // TODO Vroom vroom
-        roads.getChildren().add(setImageView("car_1.png", size * 0.133));
-        roads.getChildren().add(setImageView("ambulance.png", size * 0.133));
+        //roads.getChildren().add(setImageView("car_1.png", size * 0.133));
+        //roads.getChildren().add(setImageView("ambulance.png", size * 0.133));
         borderPane.setCenter(roads);
         //discard roads usage, sorry i was trying to make it work, but it was
         // always centered and being weird if not centered
@@ -198,7 +197,7 @@ public class TrafficGUI {
         imageView2.setLayoutX(300);
         imageView2.setLayoutY(100);
 
-        vehiclePane.getChildren().addAll(imageView1, imageView2);
+        vehiclePane.getChildren().addAll(imageView1);
 
         this.stackPane.getChildren().addAll(borderPane, vehiclePane);
 
@@ -206,7 +205,9 @@ public class TrafficGUI {
     }
 
     public static void addCar(ImageView imageView){
-        vehiclePane.getChildren().add(imageView);
+        Platform.runLater(() -> {
+            vehiclePane.getChildren().add(imageView);
+        });
     }
 
     public static void removeCar(ImageView imageView){
@@ -215,6 +216,15 @@ public class TrafficGUI {
 
     public void looper() {
         new Thread(() -> {
+            Platform.runLater(() -> {
+                vehiclePane.getChildren().clear();
+                // Perform other JavaFX scene graph modifications here
+            });
+            for (Car car: SysMan2.carList){
+                Platform.runLater(() -> {
+                    vehiclePane.getChildren().add(car.getImageView());
+                });
+            }
             final int[] x = {900}; // Using an array to hold the mutable value
             final int y = 100; // y can remain as is
 
@@ -225,10 +235,10 @@ public class TrafficGUI {
                 }
 
                 // Update the position of imageView1
-                Platform.runLater(() -> {
-                    imageView1.setLayoutX(x[0]); // Using x[0]
-                    imageView1.setLayoutY(y);
-                });
+//                Platform.runLater(() -> {
+//                    imageView1.setLayoutX(x[0]); // Using x[0]
+//                    imageView1.setLayoutY(y);
+//                });
 
                 try {
                     Thread.sleep(100); // Sleep for 1 second before updating
