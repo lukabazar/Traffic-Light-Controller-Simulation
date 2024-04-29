@@ -42,7 +42,7 @@ public class Main extends Application {
 
 
         SysMan2 sysMan = new SysMan2();
-        gui.looper();
+        //gui.looper();
 
         primaryStage.setScene(scene);
         primaryStage.show();
