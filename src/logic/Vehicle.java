@@ -7,16 +7,16 @@ import java.awt.*;
 
 public  abstract class Vehicle implements Runnable {
     private Direction currentDir;
-    private int speed = 5;
+    private double speed = 10;
     private float transparency = 0;
     private boolean intersectionFlag = false;
-    final double minBufferDistance = 10;
+    final double minBufferDistance = 30;
     private Point location = new Point();
     private Lane lane;
     private boolean running = false;
     private ImageView imageView;
     private double imageRotation;
-    private int maxSpeed;
+    private double maxSpeed;
     private double tileSize;
     private int id;
     private int lastIntersectionID = -1;
@@ -48,11 +48,11 @@ public  abstract class Vehicle implements Runnable {
         this.currentDir = dir;
     }
 
-    public int getSpeed(){
+    public double getSpeed(){
         return this.speed;
     }
 
-    public void setSpeed(int speed){
+    public void setSpeed(double speed){
         this.speed = speed;
     }
 
@@ -118,7 +118,7 @@ public  abstract class Vehicle implements Runnable {
         return this.imageRotation;
     }
 
-    public int getMaxSpeed(){
+    public double getMaxSpeed(){
         return this.maxSpeed;
     }
 
