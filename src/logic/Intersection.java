@@ -351,28 +351,27 @@ public class Intersection implements Runnable {
             case NORTH -> {
                 temp.add(spawns.get(4));
                 temp.add(spawns.get(5));
-                System.out.println(temp);
+                //System.out.println(temp);
                 // code block
                 return new Pair<>(temp.get(choice), tempLane);
             }
             case SOUTH -> {
                 temp.add(spawns.get(0));
                 temp.add(spawns.get(1));
-                System.out.println(temp);
+                //System.out.println(temp);
                 // code block
                 return new Pair<>(temp.get(choice), tempLane);
             }
             case EAST -> {
                 temp.add(spawns.get(6));
                 temp.add(spawns.get(7));
-                System.out.println(temp);
+                //System.out.println(temp);
                 // code block
                 return new Pair<>(temp.get(choice), tempLane);
             }
             case WEST -> {
                 temp.add(spawns.get(2));
                 temp.add(spawns.get(3));
-                System.out.println(temp);
                 // code block
                 return new Pair<>(temp.get(choice), tempLane);
             }
