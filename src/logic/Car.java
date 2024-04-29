@@ -10,12 +10,20 @@ public class Car extends Vehicle {
 
     private boolean EMS_inbound;
     private boolean running = true;
+    private State state;
+
+    public enum State {
+        ROAD,
+        BUFFER,
+        LEFT_TURN,
+        RIGHT_TURN,
+        STRAIGHT
+    }
 
 
     public Car(int id, Point p, Direction dir, Lane lane, double tileSize) {
         this.setId(id);
         this.setLocation(p);
-        //this.setLocation(new Point(500,300));
         this.setDirection(dir);
         this.setLane(lane);
         setTileSize(tileSize);
@@ -46,8 +54,8 @@ public class Car extends Vehicle {
 
         }
         Point delta = this.getDirection().getDeltaDirection();
-        int x = tempPoint.x + delta.x*5;
-        int y = tempPoint.y + delta.y*5;
+        int x = tempPoint.x + delta.x*this.getSpeed();
+        int y = tempPoint.y + delta.y*this.getSpeed();
 
         this.setLocation(new Point(x,y));
         this.GUIupdate();
@@ -86,7 +94,7 @@ public class Car extends Vehicle {
             imageView =
                     new ImageView("car_1.png"); // 80% probability for car_1.png
         } else {
-            setMaxSpeed(2);
+            setMaxSpeed(3);
             imageView =
                     new ImageView("car_2.png"); // 20% probability for car_2.png
         }

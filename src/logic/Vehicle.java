@@ -7,7 +7,7 @@ import java.awt.*;
 
 public  abstract class Vehicle implements Runnable {
     private Direction currentDir;
-    private int speed = 0;
+    private int speed = 5;
     private float transparency = 0;
     private boolean intersectionFlag = false;
     private final int minBufferDistance = 10;

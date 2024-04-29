@@ -186,8 +186,8 @@ public class SysMan2 implements Runnable{
                     createVehicle();
                     Thread.sleep(100);
                 }
-                //removeVehicles();
-                Thread.sleep(200);
+                removeVehicles();
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
