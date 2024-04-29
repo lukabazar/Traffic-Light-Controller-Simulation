@@ -22,6 +22,13 @@ public  abstract class Vehicle implements Runnable {
     private int lastIntersectionID = -1;
     private int currentIntersectionID = -1;
 
+    public int getLastIntersectionID(){
+        return this.lastIntersectionID;
+    }
+
+    public int getCurrentIntersectionID(){
+        return this.currentIntersectionID;
+    }
 
     public int getId(){
         return this.id;
@@ -84,6 +91,8 @@ public  abstract class Vehicle implements Runnable {
         this.location = p;
     }
 
+
+
     public void GUIupdate(){
         Platform.runLater(() -> {
 
@@ -134,18 +143,19 @@ public  abstract class Vehicle implements Runnable {
 
     public abstract void stop();
 
-    public void checkIntersections(){
+    public boolean checkIntersections(){
         Point temp;
         for (Intersection inter: SysMan2.intersectionList){
             if (inter.getID() != this.lastIntersectionID){
                 temp = inter.getCenter();
                 if (temp.distance(this.location) < 125){
                     this.currentIntersectionID = inter.getID();
-                    return;
+                    return true;
                 }
             }
 
         }
+        return false;
     }
 
 }

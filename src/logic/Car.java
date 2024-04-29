@@ -121,6 +121,17 @@ public class Car extends Vehicle {
                     return true;
                 }
 
+                if (getCurrentIntersectionID() == -1) {
+                    if (this.checkIntersections()) {
+                        // queryIntersection
+
+                    }
+                } else {
+                    //query intersection
+                }
+
+                // switch case query
+
                 boolean safeDistance = distanceCheck();
                 if (!distanceCheck()) {
                     double new_speed = this.getSpeed() - 0.5;
