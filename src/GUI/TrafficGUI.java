@@ -21,9 +21,11 @@ import logic.Car;
 import logic.Intersection;
 import logic.SysMan2;
 
+import java.awt.*;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Main class for the GUI
@@ -35,6 +37,10 @@ public class TrafficGUI {
     private final StackPane stackPane;
     private static Pane vehiclePane;
     private final Scene scene;
+    public static CopyOnWriteArrayList<Intersection> intersectionList =
+            new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<Thread> intersectionThreads =
+            new CopyOnWriteArrayList<>();
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
     public static ImageView[] intersectionImages = new ImageView[6];
     private final Stage popUp = new Stage();
@@ -74,12 +80,11 @@ public class TrafficGUI {
         stackPane.setMinSize(5 * size, 3 * size);
         stackPane.setMaxSize(5 * size, 3 * size);
         VBox vBox = new VBox();
-        int interIndex = -1;
+        int interIndex = 0;
 
         Random randy = new Random();
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
-        //Intersection[] intArray = new Intersection[6];
         Intersection.LightColor[] colors =
                 {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
         for (int i = 0; i < rows; i++) {
@@ -92,10 +97,10 @@ public class TrafficGUI {
                 if (i % 2 == 0) {
                     if (inter) {
                         int rand = randy.nextInt(2);
-                        interIndex++;
+
                         imageView = setImageView("redgreen.png", size);
                         intersectionImages[interIndex] = imageView;
-
+                        interIndex++;
                         inter = false;
                     } else {
                         imageView =
