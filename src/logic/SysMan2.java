@@ -77,7 +77,6 @@ public class SysMan2 implements Runnable{
         int startingX = 0;
         int startingY = 0;
         Direction dir = directions[RNG];
-        System.out.println(dir);
 
         ArrayList<Integer> tempList = new ArrayList<>();
         tempList.clear();
@@ -188,7 +187,7 @@ public class SysMan2 implements Runnable{
                     Thread.sleep(100);
                 }
                 //removeVehicles();
-                Thread.sleep(sleepDelay);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

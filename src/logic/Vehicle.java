@@ -78,7 +78,7 @@ public  abstract class Vehicle implements Runnable {
         this.location = p;
     }
 
-    public void update(){
+    public void GUIupdate(){
         Platform.runLater(() -> {
 
 

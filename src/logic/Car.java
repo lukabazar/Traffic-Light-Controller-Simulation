@@ -39,7 +39,7 @@ public class Car extends Vehicle {
         if (tempPoint.x < -100 || tempPoint.x > 1100 || tempPoint.y < -100 || tempPoint.y > 700){
             running = false;
             this.setLocation(new Point(-100,-100));
-            this.update();
+            this.GUIupdate();
 
 
             return true;
@@ -50,7 +50,7 @@ public class Car extends Vehicle {
         int y = tempPoint.y + delta.y*5;
 
         this.setLocation(new Point(x,y));
-        this.update();
+        this.GUIupdate();
 
 
         return true;
@@ -67,7 +67,6 @@ public class Car extends Vehicle {
             }
 
             // do stuff
-
 
         }
     }
