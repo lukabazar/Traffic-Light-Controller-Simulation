@@ -39,8 +39,6 @@ public class Main extends Application {
 
         gui.setUp();
 
-        Car tests = new Car(1,new Point(300,300), Direction.EAST, Lane.LEFT,
-                200);
 
         primaryStage.setScene(scene);
         primaryStage.show();

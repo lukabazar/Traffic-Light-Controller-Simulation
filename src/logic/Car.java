@@ -15,7 +15,7 @@ public class Car extends Vehicle {
     public Car(int id, Point p, Direction dir, Lane lane, double tileSize) {
         this.setId(id);
         this.setLocation(p);
-        this.setLocation(new Point(344,444));
+        this.setLocation(new Point(500,300));
         this.setDirection(dir);
         this.setLane(lane);
         setTileSize(tileSize);
@@ -23,7 +23,6 @@ public class Car extends Vehicle {
         setImageRotation(getDirection(), null);
 
         TrafficGUI.addCar(getImageView());
-        System.out.println(dir);
     }
 
 
@@ -35,9 +34,9 @@ public class Car extends Vehicle {
     // returns true if the car moves
     public boolean move() {
         Point tempPoint = this.getLocation();
-        System.out.println(getId() + "" +tempPoint);
+        //System.out.println(getId() + "" +tempPoint);
 
-        if (tempPoint.x < -10 || tempPoint.x > 1000 || tempPoint.y < 0 || tempPoint.y > 600){
+        if (tempPoint.x < 50 || tempPoint.x > 800 || tempPoint.y < 30 || tempPoint.y > 500){
             running = false;
         }
         Point delta = this.getDirection().getDeltaDirection();
@@ -53,12 +52,10 @@ public class Car extends Vehicle {
 
     @Override
     public void run() {
-        System.out.println("runningggggg");
         while (running) {
-            System.out.println("car move");
             move();
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

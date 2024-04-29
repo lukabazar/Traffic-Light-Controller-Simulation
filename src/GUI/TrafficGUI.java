@@ -17,6 +17,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import logic.Car;
 import logic.Intersection;
 import logic.SysMan2;
 
@@ -157,7 +158,7 @@ public class TrafficGUI {
                     }
                 });
 
-                // Remove overlay and cursor
+//                 Remove overlay and cursor
                 stackPane.setOnMouseExited((MouseEvent e) -> {
                     stackPane.getChildren().remove(overlay);
                     scene.setCursor(Cursor.DEFAULT);
@@ -197,7 +198,7 @@ public class TrafficGUI {
         imageView2.setLayoutX(300);
         imageView2.setLayoutY(100);
 
-        vehiclePane.getChildren().addAll(imageView1, imageView2);
+        vehiclePane.getChildren().addAll(imageView1);
 
         this.stackPane.getChildren().addAll(borderPane, vehiclePane);
 
@@ -217,6 +218,15 @@ public class TrafficGUI {
 
     public void looper() {
         new Thread(() -> {
+            Platform.runLater(() -> {
+                vehiclePane.getChildren().clear();
+                // Perform other JavaFX scene graph modifications here
+            });
+            for (Car car: SysMan2.carList){
+                Platform.runLater(() -> {
+                vehiclePane.getChildren().add(car.getImageView());
+                });
+            }
             final int[] x = {900}; // Using an array to hold the mutable value
             final int y = 100; // y can remain as is
 
