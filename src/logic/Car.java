@@ -15,7 +15,7 @@ public class Car extends Vehicle {
     public Car(int id, Point p, Direction dir, Lane lane, double tileSize) {
         this.setId(id);
         this.setLocation(p);
-        this.setLocation(new Point(500,300));
+        //this.setLocation(new Point(500,300));
         this.setDirection(dir);
         this.setLane(lane);
         setTileSize(tileSize);
@@ -36,7 +36,7 @@ public class Car extends Vehicle {
         Point tempPoint = this.getLocation();
         //System.out.println(getId() + "" +tempPoint);
 
-        if (tempPoint.x < 50 || tempPoint.x > 800 || tempPoint.y < 30 || tempPoint.y > 500){
+        if (tempPoint.x < -100 || tempPoint.x > 1000 || tempPoint.y < -100 || tempPoint.y > 700){
             running = false;
             this.setLocation(new Point(-100,-100));
             this.update();
