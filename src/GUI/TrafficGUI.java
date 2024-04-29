@@ -66,8 +66,7 @@ public class TrafficGUI {
         this.scene = scene;
         this.rows = rows;
         this.cols = cols;
-        this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33,
-                                           SysMan2.intersectionList);
+        this.popUpWindow = new PopUpWindow(screenSize.getHeight() / 1.33);
 
     }
 
@@ -133,7 +132,7 @@ public class TrafficGUI {
                 Color green = Color.web("0x468D34", 1.0);
 
                 // For the popup window
-                int finalInterIndex = interIndex;
+                int finalInterIndex = interIndex - 1;
                 stackPane.setOnMouseClicked((MouseEvent e) -> {
                     if (popUp.isShowing()) {
                         popUp.close();
@@ -206,7 +205,6 @@ public class TrafficGUI {
     }
 
     public static void addCar(ImageView imageView){
-        System.out.println("car was added to GUI");
         Platform.runLater(() -> {
             vehiclePane.getChildren().add(imageView);
         });

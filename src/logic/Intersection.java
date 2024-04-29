@@ -27,6 +27,8 @@ public class Intersection implements Runnable {
     private LightColor northSouthColor; // color of the north and south lights
     private LightColor eastWestColor; // color of east and west lights
 
+    private boolean construction = true;
+
     private Point center;
     private int northStop, southStop, eastStop, westStop;
             // northStop = boundary incoming cars from NORTH may not cross
@@ -136,6 +138,7 @@ public class Intersection implements Runnable {
                 (int) center.getY() + 28));//westRight
 
         setImages();
+        construction = false;
 
     }
 
@@ -168,7 +171,7 @@ public class Intersection implements Runnable {
         if (images != null) {
 
             if (eastWestColor == LightColor.GREEN &&
-                    northSouthColor == LightColor.RED) {
+                    northSouthColor == LightColor.RED && !construction) {
                 String[] greenred = {"greenredppl1.png","greenredppl2.png","greenredppl3.png",
                         "greenredppl4.png","greenredppl5.png","greenredppl6.png","greenRed.png"};
                 for(int i=0; i<7; i++){
@@ -183,7 +186,7 @@ public class Intersection implements Runnable {
 
             }
             if (eastWestColor == LightColor.RED &&
-                    northSouthColor == LightColor.GREEN) {
+                    northSouthColor == LightColor.GREEN && !construction) {
                 String[] redgreenppl = {"redgreenppl1.png",
                         "redgreenppl2.png", "redgreenppl3.png","redgreenppl1.png",
                         "redgreenppl4.png","redgreenppl5.png", "redgreen.png"};

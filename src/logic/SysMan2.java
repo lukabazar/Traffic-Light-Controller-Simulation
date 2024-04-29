@@ -46,6 +46,7 @@ public class SysMan2 implements Runnable{
 
 
     private void createIntersections() {
+
         int id = 0;
         for (int i = 0; i < 3; i += 2) {
             for (int j = 0; j < 5; j += 2) {
@@ -65,7 +66,6 @@ public class SysMan2 implements Runnable{
 
 
     private void createVehicle(){
-        System.out.println("car creation");
         //RNG EMS vehicle creation.
         rand = new Random();
         double EMS_RNG = rand.nextDouble();
@@ -117,7 +117,6 @@ public class SysMan2 implements Runnable{
         Thread carThread = new Thread(car);
 
         carThread.start();
-        System.out.println("car started?");
 
         carThreads.add(carThread);
         currentCars++;
@@ -149,7 +148,7 @@ public class SysMan2 implements Runnable{
             }
         }
         //System.out.println("number of cars to make: " + NumOfCarsToCreate);
-        System.out.println(NumOfCarsToCreate);
+        //.println(NumOfCarsToCreate);
         return NumOfCarsToCreate;
     }
 
@@ -170,7 +169,6 @@ public class SysMan2 implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("sysman running");
         int numCarCreate = 1;
         createIntersections();
         createDMS();

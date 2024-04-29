@@ -40,10 +40,12 @@ public class Main extends Application {
         gui.setUp();
 
 
-        primaryStage.setScene(scene);
-        primaryStage.show();
+
         SysMan2 sysMan = new SysMan2();
         gui.looper();
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }
 

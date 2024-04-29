@@ -10,6 +10,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import logic.Intersection;
+import logic.SysMan2;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -43,9 +44,9 @@ public class PopUpWindow {
      *
      * @param size Calculated size
      */
-    public PopUpWindow(double size, CopyOnWriteArrayList<Intersection> intersectionList) {
+    public PopUpWindow(double size) {
         this.size = size;
-        this.intersectionList = intersectionList;
+        this.intersectionList = SysMan2.intersectionList;
         this.font = Font.loadFont(getClass().getResourceAsStream(
                 "../fonts/advanced-led-board-7.regular.ttf"), this.size / 32.5);
         this.intersectionGUI = new IntersectionGUI();
