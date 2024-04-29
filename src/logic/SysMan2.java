@@ -39,7 +39,7 @@ public class SysMan2 implements Runnable{
 
     public SysMan2(){
         this.tileSize = TrafficGUI.getTileSize();
-        createIntersections();
+        //createIntersections();
         Thread thread = new Thread(this);
         thread.start();
     }
@@ -190,4 +190,5 @@ public class SysMan2 implements Runnable{
             }
         }
     }
+
 }

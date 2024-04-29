@@ -10,6 +10,7 @@ import javafx.util.Pair;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Intersection implements Runnable {
     private final long greenRedDuration = 8000;
@@ -163,21 +164,38 @@ public class Intersection implements Runnable {
     }
 
     private void setImages() {
-        //StackPane stackPane = TrafficGUI.stackPaneIntersection;
+        long currentTime = System.currentTimeMillis();
         if (images != null) {
 
             if (eastWestColor == LightColor.GREEN &&
                     northSouthColor == LightColor.RED) {
+                String[] greenred = {"greenredppl1.png","greenredppl2.png","greenredppl3.png",
+                        "greenredppl4.png","greenredppl5.png","greenredppl6.png","greenRed.png"};
+                for(int i=0; i<7; i++){
+                    images[intersectionNumber].setImage((new Image(greenred[i])));
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-                    images[intersectionNumber].setImage(new Image("greenRed" +
-                                                                          ".png"));
 
             }
             if (eastWestColor == LightColor.RED &&
                     northSouthColor == LightColor.GREEN) {
+                String[] redgreenppl = {"redgreenppl1.png",
+                        "redgreenppl2.png", "redgreenppl3.png","redgreenppl1.png",
+                        "redgreenppl4.png","redgreenppl5.png", "redgreen.png"};
+                for(int i=0; i<7; i++){
+                    images[intersectionNumber].setImage(new Image(redgreenppl[i]));
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-                images[intersectionNumber].setImage(new Image(
-                        "redgreen.png"));
 
             }
             if (eastWestColor == LightColor.RED &&
@@ -213,7 +231,7 @@ public class Intersection implements Runnable {
             northSouthColor = newColor;
             eastWestColor = oppositeLight(newColor);
         } else if (direction == LightDirection.EASTWEST) {
-            if (oppositeLight(newColor) == LightColor.YELLOW &&
+            if(oppositeLight(newColor) == LightColor.YELLOW &&
                     newColor == LightColor.GREEN) {
                 eastWestColor = LightColor.RED;
                 northSouthColor = oppositeLight(newColor);
