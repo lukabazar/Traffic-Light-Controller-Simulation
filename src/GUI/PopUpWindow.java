@@ -9,17 +9,26 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import logic.DMS;
 import logic.Intersection;
-import logic.SysMan2;
-
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static GUI.TrafficGUI.setImageView;
 
+import javafx.application.Platform;
+import logic.SysMan2;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
- * For the PopUp Window
+ * For the Intersection PopUp Window
  */
 public class PopUpWindow {
+
+    /**
+     * DMS message states
+     */
     private enum Messages {
         EMERGENCY("EMERGENCY VEHICLE\nAPPROACHING\nUSE CAUTION!"),
         REGULAR("NO SLOW DOWNS\nFOUND AHEAD\nPLEASE DRIVE SAFE!"),
@@ -30,7 +39,6 @@ public class PopUpWindow {
         Messages(String message) {
             this.message = message;
         }
-
     }
 
     private final StackPane popUp;
@@ -38,6 +46,10 @@ public class PopUpWindow {
     private final Font font;
     private final IntersectionGUI intersectionGUI;
     private final CopyOnWriteArrayList<Intersection> intersectionList;
+
+    private final DMS dmsLogic;
+    private final Timer timer;
+    private final String location = "Denver";
 
     /**
      * Pop Up Window (For zoomed in intersection view)
@@ -48,9 +60,12 @@ public class PopUpWindow {
         this.size = size;
         this.intersectionList = SysMan2.intersectionList;
         this.font = Font.loadFont(getClass().getResourceAsStream(
-                "../fonts/advanced-led-board-7.regular.ttf"), this.size / 32.5);
+                "../fonts/advanced-led-board-7.regular.ttf"), this.size / 34); // original: 32.5
         this.intersectionGUI = new IntersectionGUI();
         this.popUp = makePopUp();
+
+        this.dmsLogic = new DMS(location);
+        this.timer = new Timer();
     }
 
     /**
@@ -61,6 +76,7 @@ public class PopUpWindow {
      */
     public StackPane getPopUp(int index) {
         update(index);
+        startTimer();
         return this.popUp;
     }
 
@@ -93,6 +109,42 @@ public class PopUpWindow {
     }
 
     /**
+     * Sets DMS message based on logic state
+     * Default: cycle default message and weather conditions
+     */
+    private void updateDMSDisplay() {
+
+        String message;
+
+        switch(dmsLogic.state) {
+
+            case DEFAULT:
+            default:
+                message = Messages.REGULAR.message;
+                dmsLogic.state = DMS.State.WEATHER;
+                break;
+            case ACCIDENT:
+                message = Messages.SLOWDOWN.message;
+                break;
+            case CONSTRUCTION:
+                message = Messages.CONSTRUCTION.message;
+                break;
+            case EMERGENCY:
+                message = Messages.EMERGENCY.message;
+                break;
+            case WEATHER:
+                message = dmsLogic.wxMessage;
+                dmsLogic.state = DMS.State.DEFAULT;
+                break;
+        }
+
+        intersectionGUI.updateDMS(message, Directions.WEST);
+        intersectionGUI.updateDMS(message, Directions.NORTH);
+        intersectionGUI.updateDMS(message, Directions.SOUTH);
+        intersectionGUI.updateDMS(message, Directions.EAST);
+    }
+
+    /**
      * Initializes popup stackpane
      *
      * @return Stackpane for popup
@@ -113,6 +165,7 @@ public class PopUpWindow {
             horizontalPopUp.getChildren().add(stackRoad);
         }
 
+        /* DMS objects */
         StackPane DMS = makeDMS(size);
         DMS.setTranslateX(size * -0.5323);
         intersectionGUI.setDMSLabel((Label) DMS.getChildren().get(0), Directions.WEST);
@@ -179,7 +232,7 @@ public class PopUpWindow {
     }
 
     /**
-     * Creates the DMS sign with message
+     * Creates the DMS sign with default message
      *
      * @param size Height of window
      * @return StackPane of DMS
@@ -196,5 +249,17 @@ public class PopUpWindow {
         signText.setPrefHeight(size * 0.125);
         sign.getChildren().add(signText);
         return sign;
+    }
+
+    /**
+     * Timer for DMS display cycling
+     */
+    private void startTimer() {
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> updateDMSDisplay());
+            }
+        }, 0, 8000); // update every 8000ms = 8s
     }
 }
