@@ -302,4 +302,37 @@ public class Car extends Vehicle {
         }
     }
 
+    /**
+     * check if the car is within minBufferDistance to stop line
+     * @return true if within distance of stop line false otherwise
+     */
+    public boolean distanceToStopLine() {
+        boolean result = false;
+
+        switch (this.getDirection()) {
+            case NORTH:
+            case SOUTH:
+                result = Math.abs(this.getLocation().getY() - this.stopLine) < this.getMinBufferDistance();
+                break;
+            case EAST:
+            case WEST:
+                result = Math.abs(this.getLocation().getX() - this.stopLine) < this.getMinBufferDistance();
+        }
+        return result;
+    }
+
+    /**
+     * slow down car if it is within minBufferDistance of stop line for red light
+     */
+    public void slowDown() {
+        if (distanceToStopLine()) {
+            double new_speed = this.getSpeed() - 1;
+
+            if (new_speed < 0) {
+                new_speed = 0;
+            }
+            this.setSpeed(new_speed);
+        }
+    }
+
 }
