@@ -19,18 +19,18 @@ public class SystemManager implements Runnable{
     private static int currentCars = 0;
     private static int maxNumCars = 100;
     protected static double createVehicleProbability = 0.45;
-    protected static double createEMSProbability = 0.25;
+    protected static double createEMSProbability = 0.05;
     private Random rand = new Random();
     private static Direction directions[] = {Direction.NORTH, Direction.SOUTH
             , Direction.EAST,
             Direction.WEST};
 
-    public static CopyOnWriteArrayList<Car> carList =
+    public static CopyOnWriteArrayList<Vehicle> vehicleList =
             new CopyOnWriteArrayList<>();
     public static CopyOnWriteArrayList<Intersection> intersectionList =
             new CopyOnWriteArrayList<>();
 
-    private CopyOnWriteArrayList<Thread> carThreads =
+    private CopyOnWriteArrayList<Thread> vehicleThreads =
             new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Thread> intersectionThreads =
             new CopyOnWriteArrayList<>();
@@ -107,23 +107,29 @@ public class SystemManager implements Runnable{
         spawn = intersectionList.get(tempList.get(RNG)).getSpawn(dir);
 
         Car car;
+        EMS ems;
         if(EMS_RNG < createEMSProbability){
             // EMS go here, duplicate for now
-            car = new Car(carID, spawn.getKey(), dir, spawn.getValue(),
+            ems = new EMS(spawn.getKey(), dir, spawn.getValue(),
                           tileSize);
+            Thread emsThread = new Thread(ems);
+            vehicleList.add(ems);
+
+            emsThread.start();
+
+            vehicleThreads.add(emsThread);
         }
         else{
             car = new Car(carID, spawn.getKey(), dir, spawn.getValue(),
                           tileSize);
+            vehicleList.add(car);
+            Thread carThread = new Thread(car);
+
+            carThread.start();
+
+            vehicleThreads.add(carThread);
         }
 
-
-        carList.add(car);
-        Thread carThread = new Thread(car);
-
-        carThread.start();
-
-        carThreads.add(carThread);
         currentCars++;
         carID++;
 
@@ -158,13 +164,13 @@ public class SystemManager implements Runnable{
     }
 
     private void removeVehicles(){
-        int size = carThreads.size();
+        int size = vehicleThreads.size();
         if(size > 0){
             for(int i = 0; i < size-1; i++){
-                if(!carThreads.get(i).isAlive()){
+                if(!vehicleThreads.get(i).isAlive()){
                     //System.out.println("should remove car");
-                    carThreads.remove(i);
-                    carList.remove(i);
+                    vehicleThreads.remove(i);
+                    vehicleList.remove(i);
                     currentCars--;
                     break;
                 }
