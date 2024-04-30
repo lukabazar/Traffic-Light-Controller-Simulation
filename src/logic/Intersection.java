@@ -286,7 +286,7 @@ public class Intersection implements Runnable {
         }else if (color1 ==
                 LightColor.RED &&
                         color2 == LightColor.RED){
-            return LightColor.GREEN;
+            return LightColor.LEFTGREEN;
         }else if(color1 ==
                         LightColor.LEFTGREEN) {
             return LightColor.RED;
@@ -315,13 +315,30 @@ public class Intersection implements Runnable {
         }else{
             return LightColor.GREEN;
         }
+
     }
 
     // changes color of the lights
     private void changeLight(LightDirection direction, LightColor newColor) {
+
         if (direction == LightDirection.NORTHSOUTH) {
-            northSouthColor = newColor;
-            eastWestColor = oppositeLight(newColor, eastWestColor);
+            if(northSouthColor == LightColor.LEFTYELLOW) {
+                northSouthColor = LightColor.GREEN;
+                eastWestColor = LightColor.RED;
+            }
+            else if(northSouthColor == LightColor.LEFTGREEN){
+                northSouthColor = LightColor.LEFTYELLOW;
+                eastWestColor = LightColor.RED;
+            }
+            else if(northSouthColor == LightColor.GREEN){
+                northSouthColor = LightColor.YELLOW;
+                eastWestColor = LightColor.RED;
+            }
+            else{
+                northSouthColor = newColor;
+                eastWestColor = oppositeLight(newColor, eastWestColor);
+            }
+
         } else if (direction == LightDirection.EASTWEST
                 && (northSouthColor == LightColor.GREEN
                             && newColor == LightColor.LEFTGREEN)){//this is the one that was skipping yellow
@@ -360,28 +377,21 @@ public class Intersection implements Runnable {
         //handles yellow light timing (unaffected by volume)
         if (eastWestColor == LightColor.YELLOW &&
                 currentTime - lightChangeTime >= yellowDuration) {
-            eastWestColor = LightColor.RED;
-            northSouthColor = LightColor.LEFTGREEN;
-            //changeLight(eastWestDir, nextLight(eastWestColor));//k
-            setImages();
+            changeLight(eastWestDir, nextLight(eastWestColor));//k
             lightChangeTime = System.currentTimeMillis();
         } else if (northSouthColor == LightColor.YELLOW &&
                 currentTime - lightChangeTime >= yellowDuration) {
-            //changeLight(northSouthDir, nextLight(northSouthColor));//k
-            northSouthColor = LightColor.RED;
-            eastWestColor = LightColor.LEFTGREEN;
-            setImages();
+            changeLight(northSouthDir, nextLight(northSouthColor));//k
             lightChangeTime = System.currentTimeMillis();
         }
+        //handles left turns
         else if (northSouthColor == LightColor.LEFTGREEN
                 && currentTime - lightChangeTime >= leftDuration){
             changeLight(northSouthDir, nextLight(northSouthColor));//k
         }else if (eastWestColor == LightColor.LEFTGREEN
-                && currentTime - lightChangeTime >= leftDuration){
+                && currentTime - lightChangeTime >= leftDuration) {
             changeLight(eastWestDir, nextLight(eastWestColor));//k
         }
-        //handles left turns
-
         else if (eastWestColor == LightColor.LEFTYELLOW
                 && currentTime - lightChangeTime >= yellowDuration){
             changeLight(eastWestDir, nextLight(eastWestColor));
