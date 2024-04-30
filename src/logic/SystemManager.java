@@ -18,8 +18,8 @@ public class SystemManager implements Runnable{
     protected static int sleepDelay = 1000;
     private static int currentCars = 0;
     private static int maxNumCars = 100;
-    protected static double createVehicleProbability = 0.35;
-    protected static double createEMSProbability = 0.04;
+    protected static double createVehicleProbability = 0.40;
+    protected static double createEMSProbability = 0.05;
     private Random rand = new Random();
     private static Direction directions[] = {Direction.NORTH, Direction.SOUTH
             , Direction.EAST,
@@ -196,10 +196,10 @@ public class SystemManager implements Runnable{
                 numCarCreate = RNGCarRoll();
                 for(int i = 0; i < numCarCreate; i++){
                     createVehicle();
-                    Thread.sleep(250);
+                    Thread.sleep(300);
                 }
                 removeVehicles();
-                Thread.sleep(250);
+                Thread.sleep(300);
                 //System.out.println(carList.size());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
