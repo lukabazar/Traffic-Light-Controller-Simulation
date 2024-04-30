@@ -16,6 +16,7 @@ public class Car extends Vehicle {
     private int barrierLine = -1;
     private int exitLine = -1;
     private LightColor queryLight = null;
+    private double opacity = 1;
 
     public enum State {
         ROAD,
@@ -46,6 +47,9 @@ public class Car extends Vehicle {
     public boolean move() {
         Point tempPoint = this.getLocation();
 
+        //check for EMS cars and modify speed and opacity
+        updateEMS();
+
 
         switch (this.state) {
             case ROAD:
@@ -57,7 +61,6 @@ public class Car extends Vehicle {
 
                 if (getCurrentIntersection() == null) {
                     if (this.checkIntersections()) {
-                        System.out.println("found intersection!");
                         query();
                     }
                 } else {
@@ -82,7 +85,6 @@ public class Car extends Vehicle {
                         case RED:
                         case LEFTYELLOW:
                             if (slowDown()){
-                                System.out.println("slowdown!");
                                 break;
                             }
                             collisionDetect();
@@ -105,7 +107,6 @@ public class Car extends Vehicle {
                         getCurrentIntersection().getExitBarrier(this.getDirection());
                 collisionDetect();
                 if (crossExitBarrier()){
-                    System.out.println("exit barrier crossed");
                     this.state = State.ROAD;
                     this.queryLight = null;
                     this.setLastIntersection(getCurrentIntersection());
@@ -311,7 +312,7 @@ public class Car extends Vehicle {
                 new_speed = 0;
             }
             this.setSpeed(new_speed);
-        } else {
+        } else if (!this.EMS_inbound){
             double new_speed = this.getSpeed() + 0.2;
             if (new_speed > this.getMaxSpeed()) {
                 new_speed = this.getMaxSpeed();
@@ -388,5 +389,50 @@ public class Car extends Vehicle {
         this.setLocation(new Point(x,y));
 
         return true;
+    }
+
+    public void updateEMS(){
+        this.EMS_inbound = false;
+
+        for (EMS otherCar : SystemManager.EMSList) {
+
+
+            // don't have to do the check if same car or not going in the same direction -- automatically true
+            if (otherCar.getDirection() != this.getDirection()
+            ) {
+                continue; // Skip if it's the same car or different direction
+            }
+            if (this.getLocation().distance(otherCar.getLocation()) < 150) {
+                this.EMS_inbound = true;
+            }
+        }
+
+        if (this.EMS_inbound){
+            if (this.opacity > 0.3){
+                this.opacity -= 0.1;
+
+            } else {
+                this.opacity = 0.3;
+            }
+
+        } else {
+            if (this.opacity < 1){
+                this.opacity += 0.1;
+
+            } else {
+                this.opacity = 1;
+            }
+
+        }
+        this.updateOpacity(this.opacity);
+
+        double new_speed;
+        if (this.EMS_inbound) {
+            new_speed = this.getSpeed() - 1;
+            if (new_speed < 0) {
+                new_speed = 0;
+            }
+            this.setSpeed(new_speed);
+        }
     }
 }

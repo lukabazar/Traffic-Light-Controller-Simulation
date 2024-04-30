@@ -112,6 +112,13 @@ public  abstract class Vehicle implements Runnable {
 
     }
 
+    public void updateOpacity(double val){
+        Platform.runLater(() -> {
+            this.imageView.setOpacity(val);
+        });
+
+    }
+
     public void setLane(Lane lane){
         this.lane = lane;
     }

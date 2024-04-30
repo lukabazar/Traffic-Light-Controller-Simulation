@@ -35,6 +35,12 @@ public class SystemManager implements Runnable{
     private CopyOnWriteArrayList<Thread> intersectionThreads =
             new CopyOnWriteArrayList<>();
 
+    public static CopyOnWriteArrayList<EMS> EMSList =
+            new CopyOnWriteArrayList<>();
+
+    public static CopyOnWriteArrayList<Thread> EMSThreads =
+            new CopyOnWriteArrayList<>();
+
 
 
     public SystemManager(){
@@ -113,11 +119,11 @@ public class SystemManager implements Runnable{
             ems = new EMS(spawn.getKey(), dir, spawn.getValue(),
                           tileSize);
             Thread emsThread = new Thread(ems);
-            vehicleList.add(ems);
+            EMSList.add(ems);
 
             emsThread.start();
 
-            vehicleThreads.add(emsThread);
+            EMSThreads.add(emsThread);
         }
         else{
             car = new Car(carID, spawn.getKey(), dir, spawn.getValue(),
