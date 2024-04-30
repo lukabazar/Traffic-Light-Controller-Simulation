@@ -328,7 +328,13 @@ public class Intersection implements Runnable {
         if (direction == LightDirection.NORTHSOUTH) {
             northSouthColor = newColor;
             eastWestColor = oppositeLight(newColor, eastWestColor);
-        } else if (direction == LightDirection.EASTWEST) {
+        } else if (direction == LightDirection.EASTWEST
+                && (northSouthColor == LightColor.GREEN
+                            && newColor == LightColor.LEFTGREEN)){//this is the one that was skipping yellow
+            northSouthColor = LightColor.YELLOW;
+            eastWestColor =LightColor.RED;//keep red for duration of yellow light
+        }
+        else if (direction == LightDirection.EASTWEST) {
             northSouthColor = oppositeLight(newColor, northSouthColor);
             eastWestColor =newColor;
         }
@@ -360,16 +366,16 @@ public class Intersection implements Runnable {
         //handles yellow light timing (unaffected by volume)
         if (eastWestColor == LightColor.YELLOW &&
                 currentTime - lightChangeTime >= yellowDuration) {
-            /*eastWestColor = LightColor.RED;
-            northSouthColor = LightColor.LEFTGREEN;*/
-            changeLight(eastWestDir, nextLight(eastWestColor));//k
+            eastWestColor = LightColor.RED;
+            northSouthColor = LightColor.LEFTGREEN;
+            //changeLight(eastWestDir, nextLight(eastWestColor));//k
             setImages();
             lightChangeTime = System.currentTimeMillis();
         } else if (northSouthColor == LightColor.YELLOW &&
                 currentTime - lightChangeTime >= yellowDuration) {
-            changeLight(northSouthDir, nextLight(northSouthColor));//k
-            /*northSouthColor = LightColor.RED;
-            eastWestColor = LightColor.LEFTGREEN;*/
+            //changeLight(northSouthDir, nextLight(northSouthColor));//k
+            northSouthColor = LightColor.RED;
+            eastWestColor = LightColor.LEFTGREEN;
             setImages();
             lightChangeTime = System.currentTimeMillis();
         }
