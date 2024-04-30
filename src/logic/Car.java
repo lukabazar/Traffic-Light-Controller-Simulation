@@ -46,6 +46,7 @@ public class Car extends Vehicle {
     public boolean move() {
         Point tempPoint = this.getLocation();
 
+
         switch (this.state) {
             case ROAD:
                 if (tempPoint.x < -50 || tempPoint.x > 1050 || tempPoint.y < -50 || tempPoint.y > 650){
@@ -71,6 +72,9 @@ public class Car extends Vehicle {
                     switch (queryLight) {
                         case GREEN:
                             collisionDetect();
+                            if (crossBarrier()){
+                                this.state = State.STRAIGHT;
+                            }
                             break;
                         case LEFTGREEN:
                         case YELLOW:
@@ -88,24 +92,22 @@ public class Car extends Vehicle {
                 } else {
                     collisionDetect();
                 }
-                if (this.getSpeed() == 0){
-                    return false;
-                }
 
-                Point delta = this.getDirection().getDeltaDirection();
-                int x = (int) (tempPoint.x + delta.x*this.getSpeed());
-                int y = (int) (tempPoint.y + delta.y*this.getSpeed());
-
-                this.setLocation(new Point(x,y));
-
-                return true;
+                return finalMove();
             case BUFFER:
 
                 return true;
 
             case STRAIGHT:
+                collisionDetect();
+                if (crossExitBarrier()){
+                    this.state = State.ROAD;
+                    this.queryLight = null;
+                    this.setLastIntersection(getCurrentIntersection());
+                    this.setCurrentIntersection(null);
+                }
 
-                return true;
+                return finalMove();
             case LEFT_TURN:
 
                 return true;
@@ -342,4 +344,36 @@ public class Car extends Vehicle {
         return false;
     }
 
+
+    public boolean crossBarrier() {
+        return switch (this.getDirection()) {
+            case NORTH -> this.getLocation().getY() <= this.stopLine;
+            case SOUTH -> this.getLocation().getY() >= this.stopLine;
+            case EAST -> this.getLocation().getX() >= this.stopLine;
+            case WEST -> this.getLocation().getX() <= this.stopLine;
+        };
+    }
+
+    public boolean crossExitBarrier() {
+        return switch (this.getDirection()) {
+            case NORTH -> this.getLocation().getY() <= this.exitLine;
+            case SOUTH -> this.getLocation().getY() >= this.exitLine;
+            case EAST -> this.getLocation().getX() >= this.exitLine;
+            case WEST -> this.getLocation().getX() <= this.exitLine;
+        };
+    }
+
+    public boolean finalMove(){
+        if (this.getSpeed() == 0){
+            return false;
+        }
+
+        Point delta = this.getDirection().getDeltaDirection();
+        int x = (int) (this.getLocation().x + delta.x*this.getSpeed());
+        int y = (int) (this.getLocation().y + delta.y*this.getSpeed());
+
+        this.setLocation(new Point(x,y));
+
+        return true;
+    }
 }
