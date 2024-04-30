@@ -77,18 +77,21 @@ public class Car extends Vehicle {
 
 
 
-                switch (query) {
-                    case GREEN:
-                        break;
-                    case LEFTGREEN:
-                        break;
-                    case YELLOW:
+                if (query != null) {
+                    switch (query) {
+                        case GREEN:
+                            break;
+                        case LEFTGREEN:
+                            break;
+                        case YELLOW:
 
-                    case RED:
+                        case RED:
 
 
-                    case LEFTYELLOW:
+                        case LEFTYELLOW:
+                        default:
 
+                    }
                 }
 
                 Point delta = this.getDirection().getDeltaDirection();
