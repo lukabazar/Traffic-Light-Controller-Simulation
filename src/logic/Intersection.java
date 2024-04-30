@@ -135,7 +135,7 @@ public class Intersection implements Runnable {
                 this.westBarrier,
                 (int) center.getY() + 28));//westRight
 
-        setImages();
+        //setImages();
         construction = false;
 
     }
@@ -201,6 +201,7 @@ public class Intersection implements Runnable {
 
     @Override
     public void run() {
+        setImages();
         while (true) {
             updateIntersection();
 
