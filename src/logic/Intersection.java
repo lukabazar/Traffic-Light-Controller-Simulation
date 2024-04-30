@@ -118,10 +118,10 @@ public class Intersection implements Runnable {
 
         this.exits.add(new Point(
                 this.eastBarrier,
-                (int) center.getY() - 10));//eastLeft
+                (int) center.getY() + 10));//eastLeft
         this.exits.add(new Point(
                 this.eastBarrier,
-                (int) center.getY() - 30));//eastRight
+                (int) center.getY() + 30));//eastRight
 
         this.exits.add(new Point(
                 (int) center.getX() - 10,
@@ -132,10 +132,10 @@ public class Intersection implements Runnable {
 
         this.exits.add(new Point(
                 this.westBarrier,
-                (int) center.getY() + 9));//westLeft
+                (int) center.getY() - 9));//westLeft
         this.exits.add(new Point(
                 this.westBarrier,
-                (int) center.getY() + 28));//westRight
+                (int) center.getY() - 28));//westRight
 
         //setImages();
         construction = false;
