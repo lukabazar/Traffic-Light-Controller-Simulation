@@ -15,7 +15,7 @@ import logic.Intersection;
 import static GUI.TrafficGUI.setImageView;
 
 import javafx.application.Platform;
-import logic.SysMan2;
+import logic.SystemManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -58,7 +58,7 @@ public class PopUpWindow {
      */
     public PopUpWindow(double size) {
         this.size = size;
-        this.intersectionList = SysMan2.intersectionList;
+        this.intersectionList = SystemManager.intersectionList;
         this.font = Font.loadFont(getClass().getResourceAsStream(
                 "../fonts/advanced-led-board-7.regular.ttf"), this.size / 34); // original: 32.5
         this.intersectionGUI = new IntersectionGUI();

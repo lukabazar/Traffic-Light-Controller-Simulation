@@ -12,7 +12,7 @@ import javafx.stage.WindowEvent;
 import logic.Car;
 import logic.Direction;
 import logic.Lane;
-import logic.SysMan2;
+import logic.SystemManager;
 
 import java.awt.*;
 
@@ -41,7 +41,7 @@ public class Main extends Application {
 
 
 
-        SysMan2 sysMan = new SysMan2();
+        SystemManager sysMan = new SystemManager();
         //gui.looper();
 
         primaryStage.setScene(scene);
