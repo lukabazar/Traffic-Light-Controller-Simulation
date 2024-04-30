@@ -16,7 +16,7 @@ public  abstract class Vehicle implements Runnable {
     private boolean running = false;
     private ImageView imageView;
     private double imageRotation;
-    private double maxSpeed;
+    private double maxSpeed = 8;
     private double tileSize;
     private int id;
     private Intersection lastIntersection = null;

@@ -101,8 +101,8 @@ public class EMS extends Vehicle {
         }
 
         Point delta = this.getDirection().getDeltaDirection();
-        int x = tempPoint.x + delta.x * 15;
-        int y = tempPoint.y + delta.y * 15;
+        int x = (int) (tempPoint.x + delta.x * this.getMaxSpeed());
+        int y = (int) (tempPoint.y + delta.y * this.getMaxSpeed());
 
         this.setLocation(new Point(x,y));
 
