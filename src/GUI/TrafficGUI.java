@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 
 import logic.Car;
 import logic.Intersection;
-import logic.SysMan2;
+import logic.SystemManager;
 
 import java.awt.*;
 import java.time.Duration;
@@ -192,7 +192,7 @@ public class TrafficGUI {
                 vehiclePane.getChildren().clear();
                 // Perform other JavaFX scene graph modifications here
             });
-            for (Car car: SysMan2.carList){
+            for (Car car: SystemManager.carList){
                 Platform.runLater(() -> {
                     vehiclePane.getChildren().add(car.getImageView());
                 });

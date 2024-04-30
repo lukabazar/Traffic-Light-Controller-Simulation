@@ -145,7 +145,7 @@ public  abstract class Vehicle implements Runnable {
 
     public boolean checkIntersections(){
         Point temp;
-        for (Intersection inter: SysMan2.intersectionList){
+        for (Intersection inter: SystemManager.intersectionList){
             if (inter.getID() != this.lastIntersectionID){
                 temp = inter.getCenter();
                 if (temp.distance(this.location) < 125){

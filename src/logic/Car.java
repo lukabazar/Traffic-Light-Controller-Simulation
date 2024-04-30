@@ -41,7 +41,7 @@ public class Car extends Vehicle {
      */
     public boolean distanceCheck() {
         boolean result = true;
-        for (Car otherCar : SysMan2.carList) {
+        for (Car otherCar : SystemManager.carList) {
             Direction currentCarDirection = this.getDirection();
 
             // don't have to do the check if same car or not going in the same direction -- automatically true
