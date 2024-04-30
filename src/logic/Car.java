@@ -63,26 +63,13 @@ public class Car extends Vehicle {
 
                 // switch case query
 
-                if (!distanceCheck()) {
-                    double new_speed = this.getSpeed() - 1;
-                    if (new_speed < 0) {
-                        new_speed = 0;
-                    }
-                    this.setSpeed(new_speed);
-                } else {
-                    double new_speed = this.getSpeed() + 0.2;
-                    if (new_speed > this.getMaxSpeed()) {
-                        new_speed = this.getMaxSpeed();
-                    }
-                    this.setSpeed(new_speed);
-                }
 
 
 
                 if (queryLight != null) {
                     switch (queryLight) {
                         case GREEN:
-                            System.out.println("GREEN");
+                            collisionDetect();
                             break;
                         case LEFTGREEN:
                             break;
@@ -95,6 +82,8 @@ public class Car extends Vehicle {
                         default:
 
                     }
+                } else {
+                    collisionDetect();
                 }
 
                 Point delta = this.getDirection().getDeltaDirection();
@@ -294,6 +283,22 @@ public class Car extends Vehicle {
                 getCurrentIntersection().getStop(getDirection());
         this.barrierLine =
                 getCurrentIntersection().getBarrier(getDirection());
+    }
+
+    public void collisionDetect(){
+        if (!distanceCheck()) {
+            double new_speed = this.getSpeed() - 1;
+            if (new_speed < 0) {
+                new_speed = 0;
+            }
+            this.setSpeed(new_speed);
+        } else {
+            double new_speed = this.getSpeed() + 0.2;
+            if (new_speed > this.getMaxSpeed()) {
+                new_speed = this.getMaxSpeed();
+            }
+            this.setSpeed(new_speed);
+        }
     }
 
 }
