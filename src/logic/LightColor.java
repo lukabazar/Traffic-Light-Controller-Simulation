@@ -4,5 +4,6 @@ public enum LightColor {
     GREEN,
     YELLOW,
     LEFTYELLOW,
-    LEFTGREEN
+    LEFTGREEN,
+    EMS
 }
