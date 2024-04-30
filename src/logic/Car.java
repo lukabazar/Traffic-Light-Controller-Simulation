@@ -82,7 +82,7 @@ public class Car extends Vehicle {
                                 if (getLane() == Lane.RIGHT) {
 
                                     Random rand = new Random();
-                                    if (rand.nextDouble() < 0.25) {
+                                    if (rand.nextDouble() < 0.33) {
 
 
                                         this.setImageRotation(
