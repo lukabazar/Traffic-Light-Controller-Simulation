@@ -127,8 +127,7 @@ public class Car extends Vehicle {
                     this.setSpeed(new_speed);
                 }
 
-
-                LightQuery query = LightQuery.GREEN;
+                LightColor query = LightColor.GREEN;
 
                 switch (query) {
                     case GREEN -> {
@@ -140,13 +139,10 @@ public class Car extends Vehicle {
                     case RED -> {
 
                     }
-                    case LEFT_GREEN -> {
+                    case LEFTGREEN -> {
 
                     }
-                    case LEFT_YELLOW -> {
-
-                    }
-                    case LEFT_RED -> {
+                    case LEFTYELLOW -> {
 
                     }
 
