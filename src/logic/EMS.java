@@ -96,10 +96,17 @@ public class EMS extends Vehicle {
         Point tempPoint = this.getLocation();
 
         if (tempPoint.x < -50 || tempPoint.x > 1050 || tempPoint.y < -50 || tempPoint.y > 650){
-            running = false;
+            this.running = false;
             this.setLocation(new Point(-100,-100));
             return true;
         }
+
+        Point delta = this.getDirection().getDeltaDirection();
+        int x = tempPoint.x + delta.x * 10;
+        int y = tempPoint.y + delta.y * 10;
+
+        this.setLocation(new Point(x,y));
+
         return true;
     }
 
