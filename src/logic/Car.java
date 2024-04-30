@@ -57,10 +57,11 @@ public class Car extends Vehicle {
 
                 if (getCurrentIntersection() == null) {
                     if (this.checkIntersections()) {
+                        System.out.println("found intersection!");
                         query();
                     }
                 } else {
-                    query();
+                    queryLight();
                 }
 
                 // switch case query
@@ -81,6 +82,7 @@ public class Car extends Vehicle {
                         case RED:
                         case LEFTYELLOW:
                             if (slowDown()){
+                                System.out.println("slowdown!");
                                 break;
                             }
                             collisionDetect();
@@ -99,8 +101,11 @@ public class Car extends Vehicle {
                 return true;
 
             case STRAIGHT:
+                this.exitLine =
+                        getCurrentIntersection().getExitBarrier(this.getDirection());
                 collisionDetect();
                 if (crossExitBarrier()){
+                    System.out.println("exit barrier crossed");
                     this.state = State.ROAD;
                     this.queryLight = null;
                     this.setLastIntersection(getCurrentIntersection());
@@ -291,6 +296,11 @@ public class Car extends Vehicle {
                 getCurrentIntersection().getStop(getDirection());
         this.barrierLine =
                 getCurrentIntersection().getBarrier(getDirection());
+    }
+
+    public void queryLight(){
+        this.queryLight = getCurrentIntersection().queryLight(getDirection());
+
     }
 
     public void collisionDetect(){

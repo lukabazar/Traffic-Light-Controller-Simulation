@@ -157,7 +157,7 @@ public  abstract class Vehicle implements Runnable {
         for (Intersection inter: SystemManager.intersectionList){
             if (!inter.equals(this.lastIntersection)){
                 temp = inter.getCenter();
-                if (temp.distance(this.location) < 125){
+                if (temp.distance(this.location) < 150){
                     this.currentIntersection = inter;
                     return true;
                 }
