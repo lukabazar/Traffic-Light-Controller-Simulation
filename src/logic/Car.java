@@ -4,6 +4,7 @@ import GUI.TrafficGUI;
 import javafx.scene.image.ImageView;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.Random;
 
 public class Car extends Vehicle {
@@ -11,6 +12,9 @@ public class Car extends Vehicle {
     private boolean EMS_inbound;
     private boolean running = true;
     private State state;
+    private int stopLine = -1;
+    private int barrierLine = -1;
+    private LightColor queryLight = null;
 
     public enum State {
         ROAD,
@@ -49,37 +53,36 @@ public class Car extends Vehicle {
                     return true;
                 }
 
-                LightColor query = null;
                 if (getCurrentIntersection() == null) {
                     if (this.checkIntersections()) {
-                        //query = getCurrentIntersection().
-
+                        query();
                     }
                 } else {
-                    //query intersection
+                    query();
                 }
 
                 // switch case query
 
-                if (!distanceCheck()) {
-                    double new_speed = this.getSpeed() - 1;
-                    if (new_speed < 0) {
-                        new_speed = 0;
-                    }
-                    this.setSpeed(new_speed);
-                } else {
-                    double new_speed = this.getSpeed() + 0.2;
-                    if (new_speed > this.getMaxSpeed()) {
-                        new_speed = this.getMaxSpeed();
-                    }
-                    this.setSpeed(new_speed);
-                }
 
 
 
-                if (query != null) {
-                    switch (query) {
+
+                if (queryLight != null) {
+                    switch (queryLight) {
                         case GREEN:
+                            if (!distanceCheck()) {
+                                double new_speed = this.getSpeed() - 1;
+                                if (new_speed < 0) {
+                                    new_speed = 0;
+                                }
+                                this.setSpeed(new_speed);
+                            } else {
+                                double new_speed = this.getSpeed() + 0.2;
+                                if (new_speed > this.getMaxSpeed()) {
+                                    new_speed = this.getMaxSpeed();
+                                }
+                                this.setSpeed(new_speed);
+                            }
                             break;
                         case LEFTGREEN:
                             break;
@@ -283,6 +286,14 @@ public class Car extends Vehicle {
 
     public void flipEMS_inbound() {
         this.EMS_inbound = !this.EMS_inbound;
+    }
+
+    public void query(){
+        this.queryLight = getCurrentIntersection().queryLight(getDirection());
+        this.stopLine =
+                getCurrentIntersection().getStop(getDirection());
+        this.barrierLine =
+                getCurrentIntersection().getBarrier(getDirection());
     }
 
 }

@@ -153,37 +153,6 @@ public class Intersection implements Runnable {
         return intersectionNumber;
     }
 
-    public int getNorthStop() {
-        return this.northStop;
-    }
-
-    public int getSouthStop() {
-        return this.southStop;
-    }
-
-    public int getEastStop() {
-        return this.eastStop;
-    }
-
-    public int getWestStop() {
-        return this.westStop;
-    }
-
-    public int getNorthBarrier() {
-        return this.northBarrier;
-    }
-
-    public int getSouthBarrier() {
-        return this.southBarrier;
-    }
-
-    public int getEastBarrier() {
-        return this.eastBarrier;
-    }
-
-    public int getWestBarrier() {
-        return this.westBarrier;
-    }
 
     public LightColor queryLight(Direction dir){
         if (dir == Direction.NORTH || dir == Direction.SOUTH){
@@ -191,6 +160,24 @@ public class Intersection implements Runnable {
         } else {
             return eastWestColor;
         }
+    }
+
+    public int getStop(Direction dir){
+        return switch (dir) {
+            case NORTH -> this.northStop;
+            case SOUTH -> this.southStop;
+            case EAST -> this.eastStop;
+            case WEST -> this.westStop;
+        };
+    }
+
+    public int getBarrier(Direction dir){
+        return switch (dir) {
+            case NORTH -> this.northBarrier;
+            case SOUTH -> this.southBarrier;
+            case EAST -> this.eastBarrier;
+            case WEST -> this.westBarrier;
+        };
     }
 
 
