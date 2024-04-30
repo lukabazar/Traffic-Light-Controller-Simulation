@@ -98,14 +98,14 @@ public class TrafficGUI {
                     } else {
                         imageView =
                                 setImageView("east-west (three-quarter).png",
-                                             size);
+                                        size);
                         inter = true;
                     }
                 } else {
                     if (inter) {
                         imageView =
                                 setImageView("north-south (three-quarter).png",
-                                             size);
+                                        size);
                         inter = false;
                     } else {
                         imageView = new ImageView();
