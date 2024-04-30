@@ -1,6 +1,7 @@
 package logic;
 
 import GUI.TrafficGUI;
+import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 
 import java.awt.*;
@@ -17,6 +18,7 @@ public class Car extends Vehicle {
     private int exitLine = -1;
     private LightColor queryLight = null;
     private double opacity = 1;
+    private Point turnHeading;
 
     public enum State {
         ROAD,
@@ -81,6 +83,27 @@ public class Car extends Vehicle {
                             }
                             break;
                         case LEFTGREEN:
+                            if (getLane() == Lane.LEFT) {
+                                collisionDetect();
+                                if (crossBarrier()) {
+                                    this.setImageRotation(this.getDirection()
+                                            , Lane.LEFT);
+                                    this.state = State.LEFT_TURN;
+                                    this.turnHeading =
+                                            this.getCurrentIntersection()
+                                                    .getLeftTurn(
+                                                            this.getDirection());
+                                    this.setDirection(getLeftDirection());
+                                    this.exitLine =
+                                            this.getCurrentIntersection()
+                                                    .getExitBarrier(
+                                                            this.getDirection());
+                                }
+                            }
+                            // request intersection for heading point
+                            // get the left turn barrier
+                            // maybe change direction to that turn?
+                            break;
                         case YELLOW:
                         case RED:
                         case LEFTYELLOW:
@@ -116,6 +139,19 @@ public class Car extends Vehicle {
 
                 return finalMove();
             case LEFT_TURN:
+                moveTowards(turnHeading,4);
+                // move to headng
+                // if crossbarrier
+                // set location to that point
+                if (crossExitBarrier()){
+                    this.state = State.ROAD;
+                    this.queryLight = null;
+                    this.exitLine = -1;
+                    this.setLastIntersection(getCurrentIntersection());
+                    this.setCurrentIntersection(null);
+                    setLocation(turnHeading);
+                    this.setImageRotation(this.getDirection(), null);
+                }
 
                 return true;
             case RIGHT_TURN:
@@ -187,17 +223,25 @@ public class Car extends Vehicle {
             switch (dir) {
                 case NORTH:
                     // code block
-                    getImageView().setRotate(0);
+                    Platform.runLater(() -> {
+                        getImageView().setRotate(0);
+                    });
                     return;
                 case SOUTH:
+                    Platform.runLater(() -> {
                     getImageView().setRotate(180);
+                    });
                     return;
 
                 case EAST:
+                    Platform.runLater(() -> {
                     getImageView().setRotate(90);
+                    });
                     return;
                 case WEST:
+                    Platform.runLater(() -> {
                     getImageView().setRotate(270);
+                    });
                     return;
             }
 
@@ -205,31 +249,35 @@ public class Car extends Vehicle {
             switch (dir) {
                 case NORTH:
                     if(lane.equals(Lane.LEFT)){
-                        getImageView().setRotate(315);
-                    } else {
-                        getImageView().setRotate(45);
+                        Platform.runLater(() -> {
+                            getImageView().setRotate(315);
+                        });
+                    } else {Platform.runLater(() -> {
+                        getImageView().setRotate(45);});
                     }
                     return;
                 case SOUTH:
                     if(lane.equals(Lane.LEFT)){
-                        getImageView().setRotate(135);
-                    } else {
-                        getImageView().setRotate(225);
+                        Platform.runLater(() -> {
+
+                        getImageView().setRotate(135);});
+                    } else {Platform.runLater(() -> {
+                        getImageView().setRotate(225);});
                     }
                     return;
 
                 case EAST:
-                    if(lane.equals(Lane.LEFT)){
-                        getImageView().setRotate(45);
-                    } else {
-                        getImageView().setRotate(135);
+                    if(lane.equals(Lane.LEFT)){Platform.runLater(() -> {
+                        getImageView().setRotate(45);});
+                    } else {Platform.runLater(() -> {
+                        getImageView().setRotate(135);});
                     }
                     return;
                 case WEST:
-                    if(lane.equals(Lane.LEFT)){
-                        getImageView().setRotate(225);
-                    } else {
-                        getImageView().setRotate(315);
+                    if(lane.equals(Lane.LEFT)){Platform.runLater(() -> {
+                        getImageView().setRotate(225);});
+                    } else {Platform.runLater(() -> {
+                        getImageView().setRotate(315);});
                     }
             }
 
@@ -436,4 +484,32 @@ public class Car extends Vehicle {
             this.setSpeed(new_speed);
         }
     }
+
+    public Direction getLeftDirection(){
+        return switch (this.getDirection()) {
+            case NORTH -> Direction.WEST;
+            case SOUTH -> Direction.EAST;
+            case EAST -> Direction.NORTH;
+            case WEST -> Direction.SOUTH;
+        };
+
+    }
+
+    public void moveTowards(Point target, int distance) {
+        // Calculate the direction from A to B
+        int dx = target.x - getLocation().x;
+        int dy = target.y - getLocation().y;
+
+        // Calculate the distance between A and B
+        double distanceToTarget = target.distance(getLocation());
+
+        // Normalize the direction
+        double dirX = dx / distanceToTarget;
+        double dirY = dy / distanceToTarget;
+
+        // Move A towards B by the given distance
+        getLocation().x += (int) (dirX * distance);
+        getLocation().y += (int) (dirY * distance);
+    }
 }
+

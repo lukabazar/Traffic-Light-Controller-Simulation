@@ -135,9 +135,9 @@ public  abstract class Vehicle implements Runnable {
         this.imageView = image;
     }
 
-    public void setImageRotation(Double rotation){
-        this.imageRotation = rotation;
-    }
+//    public void setImageRotation(Double rotation){
+//        this.imageRotation = rotation;
+//    }
 
     public double getImageRotation(Double rotation){
         return this.imageRotation;
