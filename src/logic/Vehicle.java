@@ -97,8 +97,8 @@ public  abstract class Vehicle implements Runnable {
         Platform.runLater(() -> {
 
 
-        this.imageView.setX(this.location.x*tileSize/200);
-        this.imageView.setY(this.location.y*tileSize/200);
+            this.imageView.setX(this.location.x*tileSize/200);
+            this.imageView.setY(this.location.y*tileSize/200);
         });
 
     }

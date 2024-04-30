@@ -85,22 +85,22 @@ public class SysMan2 implements Runnable{
 
         switch (dir) {
             case NORTH:
-                    tempList.add(3);
-                    tempList.add(4);
-                    tempList.add(5);
-                    break;
+                tempList.add(3);
+                tempList.add(4);
+                tempList.add(5);
+                break;
             case SOUTH:
-                    tempList.add(0);
-                    tempList.add(1);
-                    tempList.add(2);
-                    break;
+                tempList.add(0);
+                tempList.add(1);
+                tempList.add(2);
+                break;
             case EAST:
-                    tempList.add(0);
-                    tempList.add(3);
-                    break;
+                tempList.add(0);
+                tempList.add(3);
+                break;
             case WEST:
-                    tempList.add(2);
-                    tempList.add(5);
+                tempList.add(2);
+                tempList.add(5);
         };
 
         RNG = rand.nextInt(tempList.size());
@@ -110,11 +110,11 @@ public class SysMan2 implements Runnable{
         if(EMS_RNG < createEMSProbability){
             // EMS go here, duplicate for now
             car = new Car(carID, spawn.getKey(), dir, spawn.getValue(),
-                                           tileSize);
+                    tileSize);
         }
         else{
             car = new Car(carID, spawn.getKey(), dir, spawn.getValue(),
-                              tileSize);
+                    tileSize);
         }
 
 
@@ -188,6 +188,7 @@ public class SysMan2 implements Runnable{
                 }
                 removeVehicles();
                 Thread.sleep(250);
+                //System.out.println(carList.size());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
