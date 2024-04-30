@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class DMS {
 
     public State state;
-    public String wxMessage;
+    public String wxMessage = "";
 
     public enum State {
         DEFAULT,
@@ -32,8 +32,7 @@ public class DMS {
         String url = "https://api.openweathermap.org/data/2.5/weather?q=" + location + "&appid=" + apiKey +
                 "&exclude=minutely,daily,alerts&units=imperial";
 
-        HttpClient client = HttpClient.newHttpClient();
-        try {
+        try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -41,9 +40,6 @@ public class DMS {
 
         } catch (IOException | InterruptedException e) {
             System.out.println("Error getting weather info\n");
-        } finally {
-            // Close the HttpClient
-            client = null;
         }
     }
 
@@ -54,23 +50,58 @@ public class DMS {
 
         if(data != null) {
 
+            double temperature, feelsLike, windGust, windDir;
+            int humidity;
+
+            JSONObject jsonObject;
+
             try {
+
                 // Parse the data using org.json
-                JSONObject jsonObject = new JSONObject(data);
+                jsonObject = new JSONObject(data);
 
-                JSONObject main = jsonObject.getJSONObject("main");
-                double temperature = main.getDouble("temp");
-                double feelsLike = main.getDouble("feels_like");
+                try {
 
-                JSONObject wind = jsonObject.getJSONObject("wind");
-                double windGust = wind.getDouble("gust");
-                double windDir = wind.getDouble("deg");
+                    JSONObject main = jsonObject.getJSONObject("main");
+                    temperature = main.getDouble("temp");
+                    feelsLike = main.getDouble("feels_like");
 
-                output = String.format("Temperature: %.0f°F\nFeels like: %.0f°F\nWind gusts: %.0fmph %s",
-                                        temperature, feelsLike, windGust, degreesToCardinal(windDir));
+                    output = String.format("Temperature: %.0f°F\nFeels like: %.0f°F\n",
+                            temperature, feelsLike);
 
-            } catch (Exception e) {
-                System.err.println("Error parsing weather data: " + e.getMessage());
+                } catch(Exception e) {
+
+                    // no main weather data found
+                }
+
+                try {
+
+                    JSONObject wind = jsonObject.getJSONObject("wind");
+                    windGust = wind.getDouble("gust");
+                    windDir = wind.getDouble("deg");
+
+                    output = String.format("%sWind gusts: %.0fmph %s", output, windGust, degreesToCardinal(windDir));
+
+                } catch(Exception e) {
+
+                    // fail back with humidity on 3rd line
+                    try {
+
+                        JSONObject main = jsonObject.getJSONObject("main");
+                        humidity = main.getInt("humidity");
+
+                        output = output + "Humidity: " + humidity + "%";
+
+                    } catch(Exception ef) {
+                        // should not go in here
+                    }
+
+                }
+
+            } catch(Exception e) {
+
+                // fails gracefully with empty output
+
             }
 
         }
