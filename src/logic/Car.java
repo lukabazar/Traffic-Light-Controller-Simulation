@@ -103,7 +103,6 @@ public class Car extends Vehicle {
                             // request intersection for heading point
                             // get the left turn barrier
                             // maybe change direction to that turn?
-                            break;
                         case YELLOW:
                         case RED:
                         case LEFTYELLOW:
