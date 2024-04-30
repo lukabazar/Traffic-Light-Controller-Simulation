@@ -84,6 +84,7 @@ public class Car extends Vehicle {
                         case YELLOW:
                         case RED:
                         case LEFTYELLOW:
+                        case EMS:
                             if (slowDown()){
                                 break;
                             }
