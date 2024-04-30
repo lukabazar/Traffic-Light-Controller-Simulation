@@ -81,25 +81,25 @@ public class PopUpWindow {
     }
 
     public void update(int index) {
-        if(intersectionList.get(index).getEWState().equals(Intersection.LightColor.RED)) {
+        if(intersectionList.get(index).getEWState().equals(logic.LightColor.RED)) {
             intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("light.png", Directions.SOUTH);
         }
-        if(intersectionList.get(index).getEWState().equals(Intersection.LightColor.YELLOW)) {
+        if(intersectionList.get(index).getEWState().equals(logic.LightColor.YELLOW)) {
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
         }
-        if(intersectionList.get(index).getNSState().equals(Intersection.LightColor.YELLOW)) {
+        if(intersectionList.get(index).getNSState().equals(logic.LightColor.YELLOW)) {
             intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.SOUTH);
         }
-        if(intersectionList.get(index).getEWState().equals(Intersection.LightColor.GREEN)) {
+        if(intersectionList.get(index).getEWState().equals(logic.LightColor.GREEN)) {
             intersectionGUI.updateRegularLight("light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
