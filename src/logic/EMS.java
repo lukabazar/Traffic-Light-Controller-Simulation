@@ -106,9 +106,14 @@ public class EMS extends Vehicle {
     @Override
     public void run() {
         while (running) {
-
-            // do stuff
-            break;
+            if (move()) {
+                this.GUIupdate();
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
