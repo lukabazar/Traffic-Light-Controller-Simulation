@@ -115,12 +115,12 @@ public class PopUpWindow {
             intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
         }
         if(northSouth.equals(LightColor.RED)) {
-            intersectionGUI.updateRegularLight("yellow-light.png", Directions.NORTH);
-            intersectionGUI.updateRegularLight("yellow-light.png", Directions.SOUTH);
-        }
-        if(northSouth.equals(LightColor.YELLOW)) {
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
+        }
+        if(northSouth.equals(LightColor.YELLOW)) {
+            intersectionGUI.updateRegularLight("yellow-light.png", Directions.NORTH);
+            intersectionGUI.updateRegularLight("yellow-light.png", Directions.SOUTH);
         }
         if(northSouth.equals(LightColor.GREEN)) {
             intersectionGUI.updateRegularLight("light.png", Directions.NORTH);
