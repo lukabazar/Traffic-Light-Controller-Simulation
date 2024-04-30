@@ -79,30 +79,30 @@ public class Intersection implements Runnable {
 
         this.spawns.add(new Point(new Point(
                 (int) center.getX() - 30,
-                (int) center.getY() - 110)));
+                (int) center.getY() - 150)));
         this.spawns.add(new Point(new Point(
                 (int) center.getX() - 10,
-                (int) center.getY() - 110)));
+                (int) center.getY() - 150)));
 
         this.spawns.add(new Point(new Point(
-                (int) center.getX() + 110,
+                (int) center.getX() + 150,
                 (int) center.getY() - 30)));
         this.spawns.add(new Point(new Point(
-                (int) center.getX() + 110,
+                (int) center.getX() + 150,
                 (int) center.getY() - 10)));
 
         this.spawns.add(new Point(new Point(
                 (int) center.getX() + 28,
-                (int) center.getY() + 110)));
+                (int) center.getY() + 150)));
         this.spawns.add(new Point(new Point(
                 (int) center.getX() + 9,
-                (int) center.getY() + 110)));
+                (int) center.getY() + 150)));
 
         this.spawns.add(new Point(new Point(
-                (int) center.getX() - 110,
+                (int) center.getX() - 150,
                 (int) center.getY() + 28)));
         this.spawns.add(new Point(new Point(
-                (int) center.getX() - 110,
+                (int) center.getX() - 150,
                 (int) center.getY() + 9)));
 
         // adding EXITS in clockwise order, important for future indexed get(i)
