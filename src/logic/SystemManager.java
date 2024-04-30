@@ -198,7 +198,9 @@ public class SystemManager implements Runnable{
                     createVehicle();
                     Thread.sleep(300);
                 }
-                removeVehicles();
+                for(int  j = 0; j < vehicleList.size(); j++) {
+                    removeVehicles();
+                }
                 Thread.sleep(300);
                 //System.out.println(carList.size());
             } catch (InterruptedException e) {
