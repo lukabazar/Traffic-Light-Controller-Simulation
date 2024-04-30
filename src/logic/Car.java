@@ -78,8 +78,32 @@ public class Car extends Vehicle {
                     switch (queryLight) {
                         case GREEN:
                             collisionDetect();
-                            if (crossBarrier()){
-                                this.state = State.STRAIGHT;
+                            if (crossBarrier()) {
+                                if (getLane() == Lane.RIGHT) {
+
+                                    Random rand = new Random();
+                                    if (rand.nextDouble() < 0.25) {
+
+
+                                        this.setImageRotation(
+                                                this.getDirection()
+                                                , Lane.RIGHT);
+                                        this.state = State.RIGHT_TURN;
+                                        this.turnHeading =
+                                                this.getCurrentIntersection()
+                                                        .getRightTurn(
+                                                                this.getDirection());
+                                        this.setDirection(getRightDirection());
+                                        this.exitLine =
+                                                this.getCurrentIntersection()
+                                                        .getExitBarrier(
+                                                                this.getDirection());
+                                    } else {
+                                        this.state = State.STRAIGHT;
+                                    }
+                                } else{
+                                    this.state = State.STRAIGHT;
+                                }
                             }
                             break;
                         case LEFTGREEN:
@@ -133,34 +157,22 @@ public class Car extends Vehicle {
                 return true;
 
             case STRAIGHT:
+                this.queryLight = null;
                 this.exitLine =
                         getCurrentIntersection().getExitBarrier(this.getDirection());
                 collisionDetect();
                 if (crossExitBarrier()){
                     this.state = State.ROAD;
-                    this.queryLight = null;
+
                     this.setLastIntersection(getCurrentIntersection());
                     this.setCurrentIntersection(null);
                 }
 
                 return finalMove();
             case LEFT_TURN:
-                moveTowards(turnHeading,4);
-                // move to headng
-                // if crossbarrier
-                // set location to that point
-                if (crossExitBarrier()){
-                    this.state = State.ROAD;
-                    this.queryLight = null;
-                    this.exitLine = -1;
-                    this.setLastIntersection(getCurrentIntersection());
-                    this.setCurrentIntersection(null);
-                    setLocation(turnHeading);
-                    this.setImageRotation(this.getDirection(), null);
-                }
-
-                return true;
             case RIGHT_TURN:
+                this.queryLight = null;
+                turnMovement();
 
                 return true;
         }
@@ -501,6 +513,16 @@ public class Car extends Vehicle {
 
     }
 
+    public Direction getRightDirection(){
+        return switch (this.getDirection()) {
+            case NORTH -> Direction.EAST;
+            case SOUTH -> Direction.WEST;
+            case EAST -> Direction.SOUTH;
+            case WEST -> Direction.NORTH;
+        };
+
+    }
+
     public void moveTowards(Point target, int distance) {
         // Calculate the direction from A to B
         int dx = target.x - getLocation().x;
@@ -516,6 +538,22 @@ public class Car extends Vehicle {
         // Move A towards B by the given distance
         getLocation().x += (int) (dirX * distance);
         getLocation().y += (int) (dirY * distance);
+    }
+
+    public void turnMovement(){
+        moveTowards(turnHeading,4);
+        // move to headng
+        // if crossbarrier
+        // set location to that point
+        if (crossExitBarrier()){
+            this.state = State.ROAD;
+            this.queryLight = null;
+            this.exitLine = -1;
+            this.setLastIntersection(getCurrentIntersection());
+            this.setCurrentIntersection(null);
+            setLocation(turnHeading);
+            this.setImageRotation(this.getDirection(), null);
+        }
     }
 }
 
