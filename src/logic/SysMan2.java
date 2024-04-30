@@ -188,7 +188,6 @@ public class SysMan2 implements Runnable{
                 }
                 removeVehicles();
                 Thread.sleep(250);
-                //System.out.println(carList.size());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

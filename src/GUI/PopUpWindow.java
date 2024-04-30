@@ -15,8 +15,11 @@ import logic.Intersection;
 import static GUI.TrafficGUI.setImageView;
 
 import javafx.application.Platform;
+import logic.SysMan2;
+
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * For the Intersection PopUp Window
@@ -42,20 +45,20 @@ public class PopUpWindow {
     private final double size;
     private final Font font;
     private final IntersectionGUI intersectionGUI;
-    private final Intersection[] intArray;
+    private final CopyOnWriteArrayList<Intersection> intersectionList;
 
     private final DMS dmsLogic;
     private final Timer timer;
-    private final String location = "Albuquerque";
+    private final String location = "Denver";
 
     /**
      * Pop Up Window (For zoomed in intersection view)
      *
      * @param size Calculated size
      */
-    public PopUpWindow(double size, Intersection[] intArray) {
+    public PopUpWindow(double size) {
         this.size = size;
-        this.intArray = intArray;
+        this.intersectionList = SysMan2.intersectionList;
         this.font = Font.loadFont(getClass().getResourceAsStream(
                 "../fonts/advanced-led-board-7.regular.ttf"), this.size / 34); // original: 32.5
         this.intersectionGUI = new IntersectionGUI();
@@ -78,25 +81,25 @@ public class PopUpWindow {
     }
 
     public void update(int index) {
-        if(intArray[index].getEWState().equals(logic.LightColor.RED)) {
+        if(intersectionList.get(index).getEWState().equals(Intersection.LightColor.RED)) {
             intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("light.png", Directions.SOUTH);
         }
-        if(intArray[index].getEWState().equals(logic.LightColor.YELLOW)) {
+        if(intersectionList.get(index).getEWState().equals(Intersection.LightColor.YELLOW)) {
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
         }
-        if(intArray[index].getNSState().equals(logic.LightColor.YELLOW)) {
+        if(intersectionList.get(index).getNSState().equals(Intersection.LightColor.YELLOW)) {
             intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.SOUTH);
         }
-        if(intArray[index].getEWState().equals(logic.LightColor.GREEN)) {
+        if(intersectionList.get(index).getEWState().equals(Intersection.LightColor.GREEN)) {
             intersectionGUI.updateRegularLight("light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
@@ -130,8 +133,7 @@ public class PopUpWindow {
                 message = Messages.EMERGENCY.message;
                 break;
             case WEATHER:
-                message = (dmsLogic.wxMessage.isEmpty())?
-                        "No weather data\nCall 1-555-WEATHER\nfor more information" : dmsLogic.wxMessage;
+                message = dmsLogic.wxMessage;
                 dmsLogic.state = DMS.State.DEFAULT;
                 break;
         }
