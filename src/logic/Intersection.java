@@ -164,10 +164,10 @@ public class Intersection implements Runnable {
 
     public int getStop(Direction dir){
         return switch (dir) {
-            case NORTH -> this.northStop;
-            case SOUTH -> this.southStop;
-            case EAST -> this.eastStop;
-            case WEST -> this.westStop;
+            case NORTH -> this.southStop;
+            case SOUTH -> this.northStop;
+            case EAST -> this.westStop;
+            case WEST -> this.eastStop;
         };
     }
 

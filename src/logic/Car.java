@@ -73,18 +73,23 @@ public class Car extends Vehicle {
                             collisionDetect();
                             break;
                         case LEFTGREEN:
-                            break;
                         case YELLOW:
-
                         case RED:
-
-
                         case LEFTYELLOW:
+                            if (slowDown()){
+                                break;
+                            }
+                            collisionDetect();
+                            break;
+
                         default:
 
                     }
                 } else {
                     collisionDetect();
+                }
+                if (this.getSpeed() == 0){
+                    return false;
                 }
 
                 Point delta = this.getDirection().getDeltaDirection();
@@ -324,7 +329,7 @@ public class Car extends Vehicle {
     /**
      * slow down car if it is within minBufferDistance of stop line for red light
      */
-    public void slowDown() {
+    public boolean slowDown() {
         if (distanceToStopLine()) {
             double new_speed = this.getSpeed() - 1;
 
@@ -332,7 +337,9 @@ public class Car extends Vehicle {
                 new_speed = 0;
             }
             this.setSpeed(new_speed);
+            return true;
         }
+        return false;
     }
 
 }
