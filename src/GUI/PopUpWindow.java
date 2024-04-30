@@ -15,6 +15,7 @@ import logic.Intersection;
 import static GUI.TrafficGUI.setImageView;
 
 import javafx.application.Platform;
+import logic.LightColor;
 import logic.SystemManager;
 
 import java.util.Timer;
@@ -81,36 +82,68 @@ public class PopUpWindow {
     }
 
     public void update(int index) {
-        if (intersectionList.get(index).getEMSinbound()){
-            this.dmsLogic.state =
-                    DMS.State.EMERGENCY;
-        } else {
-            this.dmsLogic.state = DMS.State.WEATHER;}
-        if(intersectionList.get(index).getEWState().equals(logic.LightColor.RED)) {
+        LightColor eastWest = intersectionList.get(index).getEWState();
+        LightColor northSouth = intersectionList.get(index).getNSState();
+        if(eastWest.equals(LightColor.RED)) {
             intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);
-            intersectionGUI.updateRegularLight("light.png", Directions.NORTH);
-            intersectionGUI.updateRegularLight("light.png", Directions.SOUTH);
         }
-        if(intersectionList.get(index).getEWState().equals(logic.LightColor.YELLOW)) {
+        if(eastWest.equals(LightColor.YELLOW)) {
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.WEST);
+        }
+        if(eastWest.equals(LightColor.GREEN)) {
+            intersectionGUI.updateRegularLight("light.png", Directions.EAST);
+            intersectionGUI.updateRegularLight("light.png", Directions.WEST);
+        }
+        if(eastWest.equals(LightColor.LEFTGREEN)) {
+            intersectionGUI.updateTurnLight("green-arrow.png", Directions.EAST);
+            intersectionGUI.updateTurnLight("green-arrow.png", Directions.WEST);
+        }
+        if(eastWest.equals(LightColor.LEFTYELLOW)) {
+            intersectionGUI.updateTurnLight("yellow-arrow.png", Directions.EAST);
+            intersectionGUI.updateTurnLight("yellow-arrow.png", Directions.WEST);
+        }
+        if(!eastWest.equals(LightColor.LEFTGREEN) && !eastWest.equals(LightColor.LEFTYELLOW)) {
+            intersectionGUI.updateTurnLight("red-arrow.png", Directions.EAST);
+            intersectionGUI.updateTurnLight("red-arrow.png", Directions.WEST);
+        }
+        if(eastWest.equals(LightColor.EMS)) {
+            intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
+            intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
         }
-        if(intersectionList.get(index).getNSState().equals(logic.LightColor.YELLOW)) {
-            intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
-            intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);
+        if(northSouth.equals(LightColor.RED)) {
+            intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
+            intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
+        }
+        if(northSouth.equals(LightColor.YELLOW)) {
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.SOUTH);
         }
-        if(intersectionList.get(index).getEWState().equals(logic.LightColor.GREEN)) {
-            intersectionGUI.updateRegularLight("light.png", Directions.EAST);
-            intersectionGUI.updateRegularLight("light.png", Directions.WEST);
-            intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
-            intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
+        if(northSouth.equals(LightColor.GREEN)) {
+            intersectionGUI.updateRegularLight("light.png", Directions.NORTH);
+            intersectionGUI.updateRegularLight("light.png", Directions.SOUTH);
         }
-        //update(index);
+        if(northSouth.equals(LightColor.LEFTGREEN)) {
+            intersectionGUI.updateTurnLight("green-arrow.png", Directions.NORTH);
+            intersectionGUI.updateTurnLight("green-arrow.png", Directions.SOUTH);
+        }
+        if(northSouth.equals(LightColor.LEFTYELLOW)) {
+            intersectionGUI.updateTurnLight("yellow-arrow.png", Directions.NORTH);
+            intersectionGUI.updateTurnLight("yellow-arrow.png", Directions.SOUTH);
+        }
+        if(!northSouth.equals(LightColor.LEFTGREEN) && !northSouth.equals(LightColor.LEFTYELLOW)) {
+            intersectionGUI.updateTurnLight("red-arrow.png", Directions.NORTH);
+            intersectionGUI.updateTurnLight("red-arrow.png", Directions.SOUTH);
+        }
+        if (intersectionList.get(index).getEMSinbound()){
+            this.dmsLogic.state = DMS.State.EMERGENCY;
+        }
+        else {
+            this.dmsLogic.state = DMS.State.WEATHER;
+        }
     }
 
     /**
@@ -160,7 +193,7 @@ public class PopUpWindow {
         for (int i = 0; i < 3; i++) {
             StackPane stackRoad = new StackPane();
             if(i % 2 != 0) {
-                stackRoad.getChildren().add(setImageView("grass.png", size));
+                stackRoad.getChildren().add(setImageView("grassTrees.png", size));
                 stackRoad.getChildren().add(setImageView("intersection lights (three-quarter).png", size));
             }
             else {
