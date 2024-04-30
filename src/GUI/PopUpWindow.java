@@ -78,25 +78,25 @@ public class PopUpWindow {
     }
 
     public void update(int index) {
-        if(intArray[index].getEWState().equals(Intersection.LightColor.RED)) {
+        if(intArray[index].getEWState().equals(logic.LightColor.RED)) {
             intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("light.png", Directions.SOUTH);
         }
-        if(intArray[index].getEWState().equals(Intersection.LightColor.YELLOW)) {
+        if(intArray[index].getEWState().equals(logic.LightColor.YELLOW)) {
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("red-light.png", Directions.SOUTH);
         }
-        if(intArray[index].getNSState().equals(Intersection.LightColor.YELLOW)) {
+        if(intArray[index].getNSState().equals(logic.LightColor.YELLOW)) {
             intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.NORTH);
             intersectionGUI.updateRegularLight("yellow-light.png", Directions.SOUTH);
         }
-        if(intArray[index].getEWState().equals(Intersection.LightColor.GREEN)) {
+        if(intArray[index].getEWState().equals(logic.LightColor.GREEN)) {
             intersectionGUI.updateRegularLight("light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("light.png", Directions.WEST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.NORTH);

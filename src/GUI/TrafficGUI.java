@@ -78,8 +78,8 @@ public class TrafficGUI {
         Random randy = new Random();
         popUp.setTitle("Intersection");
         popUp.getIcons().add(new Image("intersection (three-quarter).png"));
-        Intersection.LightColor[] colors =
-                {Intersection.LightColor.RED, Intersection.LightColor.GREEN};
+        logic.LightColor[] colors =
+                {logic.LightColor.RED, logic.LightColor.GREEN};
         for (int i = 0; i < rows; i++) {
             HBox hBox = new HBox();
             boolean inter = true;

@@ -2,6 +2,7 @@ package logic;
 
 import GUI.TrafficGUI;
 import javafx.application.Platform;
+import javafx.scene.effect.Light;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -16,6 +17,7 @@ public class Intersection implements Runnable {
     private final long greenRedDuration = 8000;
             // green and red light have minimum of 5 second duration
     private final long yellowDuration = 3500;
+    private final long leftDuration = 4000;
             // yellow light minimum of 2 second duration
     private final long accLimit = 10;// number of cars required to change light
     private final long minLength = 4000;
@@ -26,7 +28,6 @@ public class Intersection implements Runnable {
     private LightDirection eastWestDir; // direction fo east, west lights
     private LightColor northSouthColor; // color of the north and south lights
     private LightColor eastWestColor; // color of east and west lights
-
     private boolean construction = true;
 
     private Point center;
@@ -102,7 +103,6 @@ public class Intersection implements Runnable {
         } else {
             this.northSouthColor = LightColor.RED;
             this.eastWestColor = LightColor.GREEN;
-
         }
 
         this.eastWestAcc = 0; //traffic accumulator
@@ -184,11 +184,8 @@ public class Intersection implements Runnable {
 
     }
 
-    public enum LightColor {
-        RED,
-        YELLOW,
-        GREEN
-    }
+
+
 
     private enum LightDirection {
         NORTHSOUTH,
@@ -211,11 +208,10 @@ public class Intersection implements Runnable {
             }
         }
     }
-
+    //Changes the light images on gui
     private void setImages() {
         long currentTime = System.currentTimeMillis();
         if (images != null) {
-
             if (eastWestColor == LightColor.GREEN &&
                     northSouthColor == LightColor.RED && !construction) {
                 String[] greenred = {"greenredppl1.png","greenredppl2.png","greenredppl3.png",
@@ -259,35 +255,82 @@ public class Intersection implements Runnable {
                 images[intersectionNumber].setImage(new Image("yellowred.png"));
 
             }
+            if(eastWestColor == LightColor.LEFTYELLOW){
+                images[intersectionNumber].setImage(new Image("leftYellowEast.png"));
+            }
+            else if(northSouthColor == LightColor.LEFTYELLOW){
+                images[intersectionNumber].setImage(new Image("leftYellowNorth.png"));
+            }
+            else if(northSouthColor == LightColor.RED
+                    && eastWestColor == LightColor.LEFTGREEN){
+                images[intersectionNumber].setImage(new Image("leftTurnEastWest.png"));
+            }
+            else if(eastWestColor == LightColor.RED
+                    && northSouthColor== LightColor.LEFTGREEN){
+                images[intersectionNumber].setImage(new Image("leftTurnNorthSouth.png"));
+            }
         }
     }
+    //Gets what opposite light should be
+    private LightColor oppositeLight(LightColor color1, LightColor color2) {
+        if (color1 == LightColor.GREEN) {
+            return LightColor.RED;
+        } else if (color1 ==
+                LightColor.YELLOW) {//keeps the other light red for duration
+            // of yellow
+            return LightColor.RED;
+        } else if(color1 ==
+                LightColor.RED
+                    && color2 == LightColor.LEFTGREEN) {
+            return LightColor.LEFTYELLOW;
+        }
+        else if(color1 ==
+                    LightColor.RED
+                    && color2 == LightColor.LEFTYELLOW) {
+            return LightColor.GREEN;
 
-    private LightColor oppositeLight(LightColor color) {
-        if (color == LightColor.GREEN) {
+        }else if (color1 ==
+                LightColor.RED &&
+                        color2 == LightColor.RED){
+            return LightColor.GREEN;
+        }else if(color1 ==
+                        LightColor.LEFTGREEN) {
+            return LightColor.RED;
+        }else if (color1 ==
+                        LightColor.LEFTYELLOW){
+            return LightColor.RED;
+        }
+        else{
+            return LightColor.RED;
+        }
+    }
+    private LightColor nextLight(LightColor color){
+        if (color ==
+                LightColor.GREEN) {
             return LightColor.YELLOW;
         } else if (color ==
                 LightColor.YELLOW) {//keeps the other light red for duration
             // of yellow
             return LightColor.RED;
-        } else {
+        } else if(color ==
+                LightColor.RED) {
+            return LightColor.LEFTGREEN;
+        }else if(color ==
+                LightColor.LEFTGREEN) {
+            return LightColor.LEFTYELLOW;
+        }else{
             return LightColor.GREEN;
         }
     }
 
-    // just changes color of the lights
+    // changes color of the lights
     private void changeLight(LightDirection direction, LightColor newColor) {
         if (direction == LightDirection.NORTHSOUTH) {
             northSouthColor = newColor;
-            eastWestColor = oppositeLight(newColor);
+            eastWestColor = oppositeLight(newColor, eastWestColor);
         } else if (direction == LightDirection.EASTWEST) {
-            if(oppositeLight(newColor) == LightColor.YELLOW &&
-                    newColor == LightColor.GREEN) {
-                eastWestColor = LightColor.RED;
-                northSouthColor = oppositeLight(newColor);
-            } else {
-                eastWestColor = newColor;
-                northSouthColor = oppositeLight(newColor);
-            }
+            northSouthColor = oppositeLight(newColor, northSouthColor);
+            eastWestColor =newColor;
         }
         setImages();
         lightChangeTime = System.currentTimeMillis();
@@ -296,6 +339,7 @@ public class Intersection implements Runnable {
     // changes state of intersection based on time, will call changeLight method
     private void updateIntersection() {
         long currentTime = System.currentTimeMillis();
+        //red/green light timer check
         if ((((eastWestColor == LightColor.GREEN ||
                 eastWestColor == LightColor.RED) ||
                 (northSouthColor == LightColor.GREEN ||
@@ -304,36 +348,48 @@ public class Intersection implements Runnable {
                 || (eastWestAcc >= accLimit &&
                 currentTime - lightChangeTime >= minLength)) {
 
-            changeLight(eastWestDir, oppositeLight(eastWestColor));
+            changeLight(eastWestDir, nextLight(eastWestColor));//k
 
         }
-       /* if (((northSouthColor == LightColor.GREEN || northSouthColor ==
-       LightColor.RED) && (currentTime-lightChangeTime>= greenRedDuration))
-                || (northSouthAcc>=accLimit && currentTime-lightChangeTime >=
-                 minLength)){
-            changeLight(northSouthDir, oppositeLight(northSouthColor));
-            //System.out.printf("red or green %d\n", intersectionNumber);
-        }*/
+        //acc check
         if (northSouthAcc >= accLimit &&
                 currentTime - lightChangeTime >= minLength) {
-            changeLight(northSouthDir, oppositeLight(northSouthColor));
+            changeLight(northSouthDir, nextLight(northSouthColor));//k
         }
 
         //handles yellow light timing (unaffected by volume)
         if (eastWestColor == LightColor.YELLOW &&
                 currentTime - lightChangeTime >= yellowDuration) {
-            eastWestColor = LightColor.RED;
-            northSouthColor = LightColor.GREEN;
+            /*eastWestColor = LightColor.RED;
+            northSouthColor = LightColor.LEFTGREEN;*/
+            changeLight(eastWestDir, nextLight(eastWestColor));//k
             setImages();
             lightChangeTime = System.currentTimeMillis();
         } else if (northSouthColor == LightColor.YELLOW &&
                 currentTime - lightChangeTime >= yellowDuration) {
-            northSouthColor = LightColor.RED;
-            eastWestColor = LightColor.GREEN;
+            changeLight(northSouthDir, nextLight(northSouthColor));//k
+            /*northSouthColor = LightColor.RED;
+            eastWestColor = LightColor.LEFTGREEN;*/
             setImages();
             lightChangeTime = System.currentTimeMillis();
         }
+        else if (northSouthColor == LightColor.LEFTGREEN
+                && currentTime - lightChangeTime >= leftDuration){
+            changeLight(northSouthDir, nextLight(northSouthColor));//k
+        }else if (eastWestColor == LightColor.LEFTGREEN
+                && currentTime - lightChangeTime >= leftDuration){
+            changeLight(eastWestDir, nextLight(eastWestColor));//k
+        }
+        //handles left turns
 
+        else if (eastWestColor == LightColor.LEFTYELLOW
+                && currentTime - lightChangeTime >= yellowDuration){
+            changeLight(eastWestDir, nextLight(eastWestColor));
+        }
+        else if (northSouthColor == LightColor.LEFTYELLOW
+                && currentTime - lightChangeTime >= yellowDuration){
+            changeLight(northSouthDir, nextLight(eastWestColor));
+        }
     }
 
     // Parameter: dir = current direction of incoming car
