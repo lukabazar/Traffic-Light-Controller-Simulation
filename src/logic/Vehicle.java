@@ -19,15 +19,15 @@ public  abstract class Vehicle implements Runnable {
     private double maxSpeed;
     private double tileSize;
     private int id;
-    private int lastIntersectionID = -1;
-    private int currentIntersectionID = -1;
+    private Intersection lastIntersection = null;
+    private Intersection currentIntersection = null;
 
-    public int getLastIntersectionID(){
-        return this.lastIntersectionID;
+    public Intersection getLastIntersection(){
+        return this.lastIntersection;
     }
 
-    public int getCurrentIntersectionID(){
-        return this.currentIntersectionID;
+    public Intersection getCurrentIntersection(){
+        return this.currentIntersection;
     }
 
     public int getId(){
@@ -146,10 +146,10 @@ public  abstract class Vehicle implements Runnable {
     public boolean checkIntersections(){
         Point temp;
         for (Intersection inter: SystemManager.intersectionList){
-            if (inter.getID() != this.lastIntersectionID){
+            if (!inter.equals(this.lastIntersection)){
                 temp = inter.getCenter();
                 if (temp.distance(this.location) < 125){
-                    this.currentIntersectionID = inter.getID();
+                    this.currentIntersection = inter;
                     return true;
                 }
             }

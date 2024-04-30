@@ -34,60 +34,7 @@ public class Car extends Vehicle {
         TrafficGUI.addCar(getImageView());
     }
 
-    /**
-     * checks the distance between a car and all other cars; really only care if the car is going in same
-     * direction in same lane
-     * @return boolean true if the distance is greater than min buffer distance false otherwise
-     */
-    public boolean distanceCheck() {
-        boolean result = true;
-        for (Car otherCar : SystemManager.carList) {
-            Direction currentCarDirection = this.getDirection();
 
-            // don't have to do the check if same car or not going in the same direction -- automatically true
-            if (otherCar.equals(this) || otherCar.getDirection() != this.getDirection()
-                    || otherCar.getLane() != this.getLane()) {
-                continue; // Skip if it's the same car or different direction
-            }
-            switch (currentCarDirection) {
-                case NORTH -> {
-                    // first check if it's the car in front; next check if it is in same street/lane
-                    if ((this.getLocation().getY() >  otherCar.getLocation().getY() &&
-                            this.getLocation().getY() -  otherCar.getLocation().getY() < this.getMinBufferDistance()) &&
-                            this.getLocation().getX() == otherCar.getLocation().getX()) {
-                        return false;
-                    }
-                }
-                case SOUTH -> {
-                    if ((this.getLocation().getY() <  otherCar.getLocation().getY() &&
-                            otherCar.getLocation().getY() - this.getLocation().getY() < this.getMinBufferDistance()) &&
-                            this.getLocation().getX() == otherCar.getLocation().getX()) {
-                        return false;
-                    }
-                }
-                case EAST -> {
-                    if ((this.getLocation().getX() <  otherCar.getLocation().getX() &&
-                            otherCar.getLocation().getX() - this.getLocation().getX()  < this.getMinBufferDistance()) &&
-                            this.getLocation().getY() == otherCar.getLocation().getY()) {
-                        return false;
-                    }
-
-                }
-                case WEST -> {
-                    if ((this.getLocation().getX() >  otherCar.getLocation().getX() &&
-                            this.getLocation().getX() -  otherCar.getLocation().getX() < this.getMinBufferDistance()) &&
-                            this.getLocation().getY() == otherCar.getLocation().getY()) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return result;
-    }
-
-    public void flipEMS_inbound() {
-        this.EMS_inbound = !this.EMS_inbound;
-    }
 
 
     // returns true if the car moves
@@ -102,9 +49,10 @@ public class Car extends Vehicle {
                     return true;
                 }
 
-                if (getCurrentIntersectionID() == -1) {
+                LightColor query = null;
+                if (getCurrentIntersection() == null) {
                     if (this.checkIntersections()) {
-                        // queryIntersection
+                        //query = getCurrentIntersection().
 
                     }
                 } else {
@@ -127,24 +75,19 @@ public class Car extends Vehicle {
                     this.setSpeed(new_speed);
                 }
 
-                LightColor query = LightColor.GREEN;
+
 
                 switch (query) {
-                    case GREEN -> {
+                    case GREEN:
+                        break;
+                    case LEFTGREEN:
+                        break;
+                    case YELLOW:
 
-                    }
-                    case YELLOW -> {
+                    case RED:
 
-                    }
-                    case RED -> {
 
-                    }
-                    case LEFTGREEN -> {
-
-                    }
-                    case LEFTYELLOW -> {
-
-                    }
+                    case LEFTYELLOW:
 
                 }
 
@@ -282,6 +225,61 @@ public class Car extends Vehicle {
 
 
         }
+    }
+
+    /**
+     * checks the distance between a car and all other cars; really only care if the car is going in same
+     * direction in same lane
+     * @return boolean true if the distance is greater than min buffer distance false otherwise
+     */
+    public boolean distanceCheck() {
+        boolean result = true;
+        for (Car otherCar : SystemManager.carList) {
+            Direction currentCarDirection = this.getDirection();
+
+            // don't have to do the check if same car or not going in the same direction -- automatically true
+            if (otherCar.equals(this) || otherCar.getDirection() != this.getDirection()
+                    || otherCar.getLane() != this.getLane()) {
+                continue; // Skip if it's the same car or different direction
+            }
+            switch (currentCarDirection) {
+                case NORTH -> {
+                    // first check if it's the car in front; next check if it is in same street/lane
+                    if ((this.getLocation().getY() >  otherCar.getLocation().getY() &&
+                            this.getLocation().getY() -  otherCar.getLocation().getY() < this.getMinBufferDistance()) &&
+                            this.getLocation().getX() == otherCar.getLocation().getX()) {
+                        return false;
+                    }
+                }
+                case SOUTH -> {
+                    if ((this.getLocation().getY() <  otherCar.getLocation().getY() &&
+                            otherCar.getLocation().getY() - this.getLocation().getY() < this.getMinBufferDistance()) &&
+                            this.getLocation().getX() == otherCar.getLocation().getX()) {
+                        return false;
+                    }
+                }
+                case EAST -> {
+                    if ((this.getLocation().getX() <  otherCar.getLocation().getX() &&
+                            otherCar.getLocation().getX() - this.getLocation().getX()  < this.getMinBufferDistance()) &&
+                            this.getLocation().getY() == otherCar.getLocation().getY()) {
+                        return false;
+                    }
+
+                }
+                case WEST -> {
+                    if ((this.getLocation().getX() >  otherCar.getLocation().getX() &&
+                            this.getLocation().getX() -  otherCar.getLocation().getX() < this.getMinBufferDistance()) &&
+                            this.getLocation().getY() == otherCar.getLocation().getY()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public void flipEMS_inbound() {
+        this.EMS_inbound = !this.EMS_inbound;
     }
 
 }
