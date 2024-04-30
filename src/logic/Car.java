@@ -99,10 +99,17 @@ public class Car extends Vehicle {
                                                     .getExitBarrier(
                                                             this.getDirection());
                                 }
+                            } else {
+                                if (slowDown()){
+                                    break;
+                                }
+                                collisionDetect();
+                                break;
                             }
                             // request intersection for heading point
                             // get the left turn barrier
                             // maybe change direction to that turn?
+                            break;
                         case YELLOW:
                         case RED:
                         case LEFTYELLOW:
