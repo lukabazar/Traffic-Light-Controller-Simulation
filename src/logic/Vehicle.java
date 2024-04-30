@@ -16,7 +16,7 @@ public  abstract class Vehicle implements Runnable {
     private boolean running = false;
     private ImageView imageView;
     private double imageRotation;
-    private double maxSpeed = 8;
+    private double maxSpeed = 7;
     private double tileSize;
     private int id;
     private Intersection lastIntersection = null;
@@ -157,7 +157,7 @@ public  abstract class Vehicle implements Runnable {
         for (Intersection inter: SystemManager.intersectionList){
             if (!inter.equals(this.lastIntersection)){
                 temp = inter.getCenter();
-                if (temp.distance(this.location) < 150){
+                if (temp.distance(this.location) < 300){
                     this.currentIntersection = inter;
                     return true;
                 }
@@ -166,5 +166,7 @@ public  abstract class Vehicle implements Runnable {
         }
         return false;
     }
+
+
 
 }

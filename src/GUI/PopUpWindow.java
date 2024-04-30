@@ -49,7 +49,7 @@ public class PopUpWindow {
 
     private final DMS dmsLogic;
     private final Timer timer;
-    private final String location = "Denver";
+    private final String location = "Albuquerque";
 
     /**
      * Pop Up Window (For zoomed in intersection view)
@@ -81,6 +81,11 @@ public class PopUpWindow {
     }
 
     public void update(int index) {
+        if (intersectionList.get(index).getEMSinbound()){
+            this.dmsLogic.state =
+                    DMS.State.EMERGENCY;
+        } else {
+            this.dmsLogic.state = DMS.State.WEATHER;}
         if(intersectionList.get(index).getEWState().equals(logic.LightColor.RED)) {
             intersectionGUI.updateRegularLight("red-light.png", Directions.EAST);
             intersectionGUI.updateRegularLight("red-light.png", Directions.WEST);

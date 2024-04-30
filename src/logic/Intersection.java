@@ -14,7 +14,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Intersection implements Runnable {
-    private final long greenRedDuration = 8000;
+    private long greenRedDuration = 8000;
             // green and red light have minimum of 5 second duration
     private final long yellowDuration = 3500;
     private final long leftDuration = 4000;
@@ -42,11 +42,13 @@ public class Intersection implements Runnable {
     private ImageView[] images;
     private int eastWestAcc;
     private int northSouthAcc;
+    private boolean EMSinbound = false;
 
     // assuming that there will be some sort of number assigned to an
     // intersection so that we can differentiate btwn them
     public Intersection(int id, Point center) {
         Random rand = new Random();
+        this.greenRedDuration = 8000 + rand.nextInt(-1000,2000);
         this.lightChangeTime = System.currentTimeMillis();
         this.intersectionNumber = id;
         this.northSouthDir = LightDirection.NORTHSOUTH;
@@ -155,12 +157,23 @@ public class Intersection implements Runnable {
 
 
     public LightColor queryLight(Direction dir){
+        if(EMSinbound){
+            return LightColor.EMS;
+        }
         if (dir == Direction.NORTH || dir == Direction.SOUTH){
             return northSouthColor;
         } else {
             return eastWestColor;
         }
     }
+
+    public void setEMSinbound(boolean flag){
+        this.EMSinbound = flag;
+    }
+    public boolean getEMSinbound(){
+        return this.EMSinbound;
+    }
+
 
     public int getStop(Direction dir){
         return switch (dir) {

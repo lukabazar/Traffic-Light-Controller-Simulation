@@ -18,8 +18,8 @@ public class SystemManager implements Runnable{
     protected static int sleepDelay = 1000;
     private static int currentCars = 0;
     private static int maxNumCars = 100;
-    protected static double createVehicleProbability = 0.45;
-    protected static double createEMSProbability = 0.05;
+    protected static double createVehicleProbability = 0.35;
+    protected static double createEMSProbability = 0.10;
     private Random rand = new Random();
     private static Direction directions[] = {Direction.NORTH, Direction.SOUTH
             , Direction.EAST,

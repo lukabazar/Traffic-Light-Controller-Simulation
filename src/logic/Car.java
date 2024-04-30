@@ -1,6 +1,7 @@
 package logic;
 
 import GUI.TrafficGUI;
+import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 
 import java.awt.*;
@@ -9,13 +10,15 @@ import java.util.Random;
 
 public class Car extends Vehicle {
 
-    private boolean EMS_inbound;
+    private boolean EMS_inbound = false;
     private boolean running = true;
     private State state;
     private int stopLine = -1;
     private int barrierLine = -1;
     private int exitLine = -1;
     private LightColor queryLight = null;
+    private double opacity = 1;
+    private boolean distanceCheckResult;
 
     public enum State {
         ROAD,
@@ -40,24 +43,25 @@ public class Car extends Vehicle {
     }
 
 
-
-
     // returns true if the car moves
     public boolean move() {
+        this.distanceCheckResult = distanceCheck();
+        EMSupdate();
         Point tempPoint = this.getLocation();
 
 
         switch (this.state) {
             case ROAD:
-                if (tempPoint.x < -50 || tempPoint.x > 1050 || tempPoint.y < -50 || tempPoint.y > 650){
+                if (tempPoint.x < -50 || tempPoint.x > 1050 ||
+                        tempPoint.y < -50 || tempPoint.y > 650) {
                     running = false;
-                    this.setLocation(new Point(-100,-100));
+                    this.setLocation(new Point(-100, -100));
                     return true;
                 }
 
                 if (getCurrentIntersection() == null) {
                     if (this.checkIntersections()) {
-                        System.out.println("found intersection!");
+                        //System.out.println("found intersection!");
                         query();
                     }
                 } else {
@@ -67,13 +71,11 @@ public class Car extends Vehicle {
                 // switch case query
 
 
-
-
                 if (queryLight != null) {
                     switch (queryLight) {
                         case GREEN:
                             collisionDetect();
-                            if (crossBarrier()){
+                            if (crossBarrier()) {
                                 this.state = State.STRAIGHT;
                             }
                             break;
@@ -81,8 +83,9 @@ public class Car extends Vehicle {
                         case YELLOW:
                         case RED:
                         case LEFTYELLOW:
-                            if (slowDown()){
-                                System.out.println("slowdown!");
+                        case EMS:
+                            if (slowDown()) {
+                                //System.out.println("slowdown!");
                                 break;
                             }
                             collisionDetect();
@@ -102,10 +105,11 @@ public class Car extends Vehicle {
 
             case STRAIGHT:
                 this.exitLine =
-                        getCurrentIntersection().getExitBarrier(this.getDirection());
+                        getCurrentIntersection().getExitBarrier(
+                                this.getDirection());
                 collisionDetect();
-                if (crossExitBarrier()){
-                    System.out.println("exit barrier crossed");
+                if (crossExitBarrier()) {
+                    //System.out.println("exit barrier crossed");
                     this.state = State.ROAD;
                     this.queryLight = null;
                     this.setLastIntersection(getCurrentIntersection());
@@ -125,15 +129,13 @@ public class Car extends Vehicle {
         //System.out.println(getId() + "" +tempPoint);
 
 
-
-
         return true;
     }
 
     @Override
     public void run() {
         while (running) {
-            if (move()){
+            if (move()) {
                 this.GUIupdate();
             }
             try {
@@ -155,7 +157,8 @@ public class Car extends Vehicle {
     public ImageView initImageView() {
         Random random = new Random();
         double probability =
-                random.nextDouble(); // Generates a random number between 0 and 1
+                random.nextDouble(); // Generates a random number between 0
+        // and 1
         ImageView imageView;
         if (probability < 0.8) {
             setMaxSpeed(5);
@@ -174,14 +177,14 @@ public class Car extends Vehicle {
         }
         imageView.setTranslateX(-getTileSize() * 0.133 / 4);
         imageView.setTranslateY(-getTileSize() * 0.133 / 2);
-        imageView.setX(getLocation().getX()*getTileSize()/200);
-        imageView.setY(getLocation().getY()*getTileSize()/200);
+        imageView.setX(getLocation().getX() * getTileSize() / 200);
+        imageView.setY(getLocation().getY() * getTileSize() / 200);
         return imageView;
     }
 
     // rotate image before sending off, add to gui, translate/offset
     public void setImageRotation(Direction dir, Lane lane) {
-        if (lane ==null) {
+        if (lane == null) {
             switch (dir) {
                 case NORTH:
                     // code block
@@ -202,14 +205,14 @@ public class Car extends Vehicle {
         } else {
             switch (dir) {
                 case NORTH:
-                    if(lane.equals(Lane.LEFT)){
+                    if (lane.equals(Lane.LEFT)) {
                         getImageView().setRotate(315);
                     } else {
                         getImageView().setRotate(45);
                     }
                     return;
                 case SOUTH:
-                    if(lane.equals(Lane.LEFT)){
+                    if (lane.equals(Lane.LEFT)) {
                         getImageView().setRotate(135);
                     } else {
                         getImageView().setRotate(225);
@@ -217,14 +220,14 @@ public class Car extends Vehicle {
                     return;
 
                 case EAST:
-                    if(lane.equals(Lane.LEFT)){
+                    if (lane.equals(Lane.LEFT)) {
                         getImageView().setRotate(45);
                     } else {
                         getImageView().setRotate(135);
                     }
                     return;
                 case WEST:
-                    if(lane.equals(Lane.LEFT)){
+                    if (lane.equals(Lane.LEFT)) {
                         getImageView().setRotate(225);
                     } else {
                         getImageView().setRotate(315);
@@ -236,50 +239,82 @@ public class Car extends Vehicle {
     }
 
     /**
-     * checks the distance between a car and all other cars; really only care if the car is going in same
+     * checks the distance between a car and all other cars; really only care
+     * if the car is going in same
      * direction in same lane
-     * @return boolean true if the distance is greater than min buffer distance false otherwise
+     *
+     * @return boolean true if the distance is greater than min buffer
+     * distance false otherwise
      */
     public boolean distanceCheck() {
         boolean result = true;
+        this.EMS_inbound = false;
         for (Vehicle otherCar : SystemManager.vehicleList) {
             Direction currentCarDirection = this.getDirection();
 
-            // don't have to do the check if same car or not going in the same direction -- automatically true
-            if (this.getClass().getName().equals("logic.EMS") || otherCar.getClass().getName().equals("logic.EMS")
-                    || otherCar.equals(this) || otherCar.getDirection() != this.getDirection()
+            if (otherCar.getClass().getName().equals("logic.EMS")
+                    && otherCar.getDirection().equals(this.getDirection())
+                    &&
+                    otherCar.getLocation().distance(this.getLocation()) < 100) {
+                this.EMS_inbound = true;
+                return false;
+
+            }
+
+            // don't have to do the check if same car or not going in the
+            // same direction -- automatically true
+            if (otherCar.equals(this) ||
+                    otherCar.getDirection() != this.getDirection()
                     || otherCar.getLane() != this.getLane()) {
                 continue; // Skip if it's the same car or different direction
             }
             switch (currentCarDirection) {
                 case NORTH -> {
-                    // first check if it's the car in front; next check if it is in same street/lane
-                    if ((this.getLocation().getY() >  otherCar.getLocation().getY() &&
-                            this.getLocation().getY() -  otherCar.getLocation().getY() < this.getMinBufferDistance()) &&
-                            this.getLocation().getX() == otherCar.getLocation().getX()) {
-                        return false;
+
+                    // first check if it's the car in front; next check if it
+                    // is in same street/lane
+                    if ((this.getLocation().getY() >
+                            otherCar.getLocation().getY() &&
+                            this.getLocation().getY() -
+                                    otherCar.getLocation().getY() <
+                                    this.getMinBufferDistance()) &&
+                            this.getLocation().getX() ==
+                                    otherCar.getLocation().getX()) {
+                        result = false;
                     }
                 }
                 case SOUTH -> {
-                    if ((this.getLocation().getY() <  otherCar.getLocation().getY() &&
-                            otherCar.getLocation().getY() - this.getLocation().getY() < this.getMinBufferDistance()) &&
-                            this.getLocation().getX() == otherCar.getLocation().getX()) {
-                        return false;
+                    if ((this.getLocation().getY() <
+                            otherCar.getLocation().getY() &&
+                            otherCar.getLocation().getY() -
+                                    this.getLocation().getY() <
+                                    this.getMinBufferDistance()) &&
+                            this.getLocation().getX() ==
+                                    otherCar.getLocation().getX()) {
+                        result =  false;
                     }
                 }
                 case EAST -> {
-                    if ((this.getLocation().getX() <  otherCar.getLocation().getX() &&
-                            otherCar.getLocation().getX() - this.getLocation().getX()  < this.getMinBufferDistance()) &&
-                            this.getLocation().getY() == otherCar.getLocation().getY()) {
-                        return false;
+                    if ((this.getLocation().getX() <
+                            otherCar.getLocation().getX() &&
+                            otherCar.getLocation().getX() -
+                                    this.getLocation().getX() <
+                                    this.getMinBufferDistance()) &&
+                            this.getLocation().getY() ==
+                                    otherCar.getLocation().getY()) {
+                        result =  false;
                     }
 
                 }
                 case WEST -> {
-                    if ((this.getLocation().getX() >  otherCar.getLocation().getX() &&
-                            this.getLocation().getX() -  otherCar.getLocation().getX() < this.getMinBufferDistance()) &&
-                            this.getLocation().getY() == otherCar.getLocation().getY()) {
-                        return false;
+                    if ((this.getLocation().getX() >
+                            otherCar.getLocation().getX() &&
+                            this.getLocation().getX() -
+                                    otherCar.getLocation().getX() <
+                                    this.getMinBufferDistance()) &&
+                            this.getLocation().getY() ==
+                                    otherCar.getLocation().getY()) {
+                        result =  false;
                     }
                 }
             }
@@ -291,7 +326,7 @@ public class Car extends Vehicle {
         this.EMS_inbound = !this.EMS_inbound;
     }
 
-    public void query(){
+    public void query() {
         this.queryLight = getCurrentIntersection().queryLight(getDirection());
         this.stopLine =
                 getCurrentIntersection().getStop(getDirection());
@@ -299,13 +334,13 @@ public class Car extends Vehicle {
                 getCurrentIntersection().getBarrier(getDirection());
     }
 
-    public void queryLight(){
+    public void queryLight() {
         this.queryLight = getCurrentIntersection().queryLight(getDirection());
 
     }
 
-    public void collisionDetect(){
-        if (!distanceCheck()) {
+    public void collisionDetect() {
+        if (!distanceCheckResult) {
             double new_speed = this.getSpeed() - 1;
             if (new_speed < 0) {
                 new_speed = 0;
@@ -322,6 +357,7 @@ public class Car extends Vehicle {
 
     /**
      * check if the car is within minBufferDistance to stop line
+     *
      * @return true if within distance of stop line false otherwise
      */
     public boolean distanceToStopLine() {
@@ -331,18 +367,21 @@ public class Car extends Vehicle {
             case NORTH:
             case SOUTH:
                 result =
-                        Math.abs(this.getLocation().getY() - this.stopLine) < this.getMinBufferDistance()-5;
+                        Math.abs(this.getLocation().getY() - this.stopLine) <
+                                this.getMinBufferDistance() - 5;
                 break;
             case EAST:
             case WEST:
                 result =
-                        Math.abs(this.getLocation().getX() - this.stopLine) < this.getMinBufferDistance()-5;
+                        Math.abs(this.getLocation().getX() - this.stopLine) <
+                                this.getMinBufferDistance() - 5;
         }
         return result;
     }
 
     /**
-     * slow down car if it is within minBufferDistance of stop line for red light
+     * slow down car if it is within minBufferDistance of stop line for red
+     * light
      */
     public boolean slowDown() {
         if (distanceToStopLine()) {
@@ -376,17 +415,63 @@ public class Car extends Vehicle {
         };
     }
 
-    public boolean finalMove(){
-        if (this.getSpeed() == 0){
+    public boolean finalMove() {
+        if (this.getSpeed() == 0) {
             return false;
         }
 
         Point delta = this.getDirection().getDeltaDirection();
-        int x = (int) (this.getLocation().x + delta.x*this.getSpeed());
-        int y = (int) (this.getLocation().y + delta.y*this.getSpeed());
+        int x = (int) (this.getLocation().x + delta.x * this.getSpeed());
+        int y = (int) (this.getLocation().y + delta.y * this.getSpeed());
 
-        this.setLocation(new Point(x,y));
+        this.setLocation(new Point(x, y));
 
         return true;
     }
+
+
+    public void EMSupdate() {
+//        this.EMS_inbound = false;
+//
+//
+//        for (Vehicle otherCar : SystemManager.vehicleList) {
+//
+//            if (otherCar.getClass().getName().equals("logic.EMS")
+//                    && otherCar.getDirection().equals(this.getDirection())
+//                    &&
+//                    otherCar.getLocation().distance(this.getLocation()) < 200) {
+//
+//                this.EMS_inbound = true;
+//
+//
+//            }
+//        }
+
+        if (this.EMS_inbound) {
+            if (this.opacity == 0.3) {
+                return;
+            }
+            this.opacity -= 0.1;
+            if (this.opacity < 0.3) {
+                this.opacity = 0.3;
+            }
+        } else {
+            if (this.opacity == 1) {
+                return;
+            }
+            this.opacity += 0.1;
+            if (this.opacity > 1) {
+                this.opacity = 1;
+            }
+        }
+        ImageView temp = getImageView();
+        temp.setOpacity(this.opacity);
+        Platform.runLater(() -> {
+            setImageView(temp);
+
+        });
+
+    }
 }
+
+
