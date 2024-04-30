@@ -330,11 +330,13 @@ public class Car extends Vehicle {
         switch (this.getDirection()) {
             case NORTH:
             case SOUTH:
-                result = Math.abs(this.getLocation().getY() - this.stopLine) < this.getMinBufferDistance();
+                result =
+                        Math.abs(this.getLocation().getY() - this.stopLine) < this.getMinBufferDistance()-5;
                 break;
             case EAST:
             case WEST:
-                result = Math.abs(this.getLocation().getX() - this.stopLine) < this.getMinBufferDistance();
+                result =
+                        Math.abs(this.getLocation().getX() - this.stopLine) < this.getMinBufferDistance()-5;
         }
         return result;
     }

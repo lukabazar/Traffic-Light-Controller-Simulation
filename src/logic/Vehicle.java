@@ -10,7 +10,7 @@ public  abstract class Vehicle implements Runnable {
     private double speed = 5;
     private float transparency = 0;
     private boolean intersectionFlag = false;
-    final double minBufferDistance = 30;
+    final double minBufferDistance = 40;
     private Point location = new Point();
     private Lane lane;
     private boolean running = false;
