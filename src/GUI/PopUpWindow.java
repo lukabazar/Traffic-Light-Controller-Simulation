@@ -193,7 +193,7 @@ public class PopUpWindow {
         for (int i = 0; i < 3; i++) {
             StackPane stackRoad = new StackPane();
             if(i % 2 != 0) {
-                stackRoad.getChildren().add(setImageView("grass.png", size));
+                stackRoad.getChildren().add(setImageView("grassTrees.png", size));
                 stackRoad.getChildren().add(setImageView("intersection lights (three-quarter).png", size));
             }
             else {
