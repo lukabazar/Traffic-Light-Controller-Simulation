@@ -173,19 +173,19 @@ public class Intersection implements Runnable {
 
     public int getBarrier(Direction dir){
         return switch (dir) {
-            case NORTH -> this.northBarrier;
-            case SOUTH -> this.southBarrier;
-            case EAST -> this.eastBarrier;
-            case WEST -> this.westBarrier;
+            case NORTH -> this.southBarrier;
+            case SOUTH -> this.northBarrier;
+            case EAST -> this.westBarrier;
+            case WEST -> this.eastBarrier;
         };
     }
 
     public int getExitBarrier(Direction dir) {
         return switch (dir) {
-            case NORTH -> this.southBarrier;
-            case SOUTH -> this.northBarrier;
-            case EAST -> this.westBarrier;
-            case WEST -> this.eastBarrier;
+            case NORTH -> this.northBarrier;
+            case SOUTH -> this.southBarrier;
+            case EAST -> this.eastBarrier;
+            case WEST -> this.westBarrier;
         };
     }
 

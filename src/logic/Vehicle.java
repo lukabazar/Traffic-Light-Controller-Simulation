@@ -30,6 +30,15 @@ public  abstract class Vehicle implements Runnable {
         return this.currentIntersection;
     }
 
+    public void setCurrentIntersection(Intersection inter){
+        this.currentIntersection = inter;
+
+    }
+
+    public void setLastIntersection(Intersection inter){
+        this.lastIntersection = inter;
+    }
+
     public int getId(){
         return this.id;
     }
