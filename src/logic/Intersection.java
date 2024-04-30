@@ -43,50 +43,6 @@ public class Intersection implements Runnable {
     private int eastWestAcc;
     private int northSouthAcc;
 
-    public LightColor getEWState() {
-        return eastWestColor;
-    }
-
-    public LightColor getNSState() {
-        return northSouthColor;
-    }
-
-    public int getID() {
-        return intersectionNumber;
-    }
-
-    public int getNorthStop() {
-        return this.northStop;
-    }
-
-    public int getSouthStop() {
-        return this.southStop;
-    }
-
-    public int getEastStop() {
-        return this.eastStop;
-    }
-
-    public int getWestStop() {
-        return this.westStop;
-    }
-
-    public int getNorthBarrier() {
-        return this.northBarrier;
-    }
-
-    public int getSouthBarrier() {
-        return this.southBarrier;
-    }
-
-    public int getEastBarrier() {
-        return this.eastBarrier;
-    }
-
-    public int getWestBarrier() {
-        return this.westBarrier;
-    }
-
     // assuming that there will be some sort of number assigned to an
     // intersection so that we can differentiate btwn them
     public Intersection(int id, Point center) {
@@ -185,6 +141,44 @@ public class Intersection implements Runnable {
     }
 
 
+    public LightColor getEWState() {
+        return eastWestColor;
+    }
+
+    public LightColor getNSState() {
+        return northSouthColor;
+    }
+
+    public int getID() {
+        return intersectionNumber;
+    }
+
+
+    public LightColor queryLight(Direction dir){
+        if (dir == Direction.NORTH || dir == Direction.SOUTH){
+            return northSouthColor;
+        } else {
+            return eastWestColor;
+        }
+    }
+
+    public int getStop(Direction dir){
+        return switch (dir) {
+            case NORTH -> this.northStop;
+            case SOUTH -> this.southStop;
+            case EAST -> this.eastStop;
+            case WEST -> this.westStop;
+        };
+    }
+
+    public int getBarrier(Direction dir){
+        return switch (dir) {
+            case NORTH -> this.northBarrier;
+            case SOUTH -> this.southBarrier;
+            case EAST -> this.eastBarrier;
+            case WEST -> this.westBarrier;
+        };
+    }
 
 
     private enum LightDirection {
