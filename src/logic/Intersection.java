@@ -180,6 +180,15 @@ public class Intersection implements Runnable {
         };
     }
 
+    public int getExitBarrier(Direction dir) {
+        return switch (dir) {
+            case NORTH -> this.southBarrier;
+            case SOUTH -> this.northBarrier;
+            case EAST -> this.westBarrier;
+            case WEST -> this.eastBarrier;
+        };
+    }
+
 
     private enum LightDirection {
         NORTHSOUTH,

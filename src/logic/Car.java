@@ -14,6 +14,7 @@ public class Car extends Vehicle {
     private State state;
     private int stopLine = -1;
     private int barrierLine = -1;
+    private int exitLine = -1;
     private LightColor queryLight = null;
 
     public enum State {
