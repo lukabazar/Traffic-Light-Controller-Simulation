@@ -237,11 +237,12 @@ public class Car extends Vehicle {
      */
     public boolean distanceCheck() {
         boolean result = true;
-        for (Car otherCar : SystemManager.carList) {
+        for (Vehicle otherCar : SystemManager.vehicleList) {
             Direction currentCarDirection = this.getDirection();
 
             // don't have to do the check if same car or not going in the same direction -- automatically true
-            if (otherCar.equals(this) || otherCar.getDirection() != this.getDirection()
+            if (this.getClass().getName().equals("logic.EMS") || otherCar.getClass().getName().equals("logic.EMS")
+                    || otherCar.equals(this) || otherCar.getDirection() != this.getDirection()
                     || otherCar.getLane() != this.getLane()) {
                 continue; // Skip if it's the same car or different direction
             }

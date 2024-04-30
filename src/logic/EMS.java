@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.Random;
 
 public class EMS extends Vehicle {
-    private boolean running;
+    private boolean running = true;
 
     public EMS(Point p, Direction dir, Lane lane, double tileSize) {
         this.setLocation(p);
@@ -94,7 +94,6 @@ public class EMS extends Vehicle {
 
     public boolean move() {
         Point tempPoint = this.getLocation();
-
         if (tempPoint.x < -50 || tempPoint.x > 1050 || tempPoint.y < -50 || tempPoint.y > 650){
             this.running = false;
             this.setLocation(new Point(-100,-100));
@@ -102,8 +101,8 @@ public class EMS extends Vehicle {
         }
 
         Point delta = this.getDirection().getDeltaDirection();
-        int x = tempPoint.x + delta.x * 10;
-        int y = tempPoint.y + delta.y * 10;
+        int x = tempPoint.x + delta.x * 15;
+        int y = tempPoint.y + delta.y * 15;
 
         this.setLocation(new Point(x,y));
 
@@ -113,7 +112,7 @@ public class EMS extends Vehicle {
     @Override
     public void run() {
         while (running) {
-            if (move()) {
+            if (move()){
                 this.GUIupdate();
             }
             try {

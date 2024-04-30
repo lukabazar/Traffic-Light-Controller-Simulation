@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import logic.Car;
 import logic.Intersection;
 import logic.SystemManager;
+import logic.Vehicle;
 
 import java.awt.*;
 import java.time.Duration;
@@ -192,9 +193,9 @@ public class TrafficGUI {
                 vehiclePane.getChildren().clear();
                 // Perform other JavaFX scene graph modifications here
             });
-            for (Car car: SystemManager.carList){
+            for (Vehicle vehicle: SystemManager.vehicleList){
                 Platform.runLater(() -> {
-                    vehiclePane.getChildren().add(car.getImageView());
+                    vehiclePane.getChildren().add(vehicle.getImageView());
                 });
             }
             final int[] x = {900}; // Using an array to hold the mutable value
