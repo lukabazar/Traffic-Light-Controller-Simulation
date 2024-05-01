@@ -184,7 +184,9 @@ public class TrafficGUI {
     }
 
     public static void removeCar(ImageView imageView){
+        Platform.runLater(() -> {
         vehiclePane.getChildren().remove(imageView);
+        });
     }
 
     public void looper() {

@@ -176,6 +176,9 @@ public class SystemManager implements Runnable{
             for(int i = 0; i < size; i++){
                 if(!EMSThreads.get(i).isAlive()){
                     //System.out.println("should remove car");
+                    //EMSList.get(i).setLocation(new Point (-100,-100));
+                    //EMSList.get(i).GUIupdate();
+                    EMSList.get(i).removeImage();
                     EMSThreads.remove(i);
                     EMSList.remove(i);
                     currentCars--;
@@ -190,6 +193,9 @@ public class SystemManager implements Runnable{
             for(int i = 0; i < size; i++){
                 if(!vehicleThreads.get(i).isAlive()){
                     //System.out.println("should remove car");
+                    //vehicleList.get(i).setLocation(new Point (-100,-100));
+                    //vehicleList.get(i).GUIupdate();
+                    vehicleList.get(i).removeImage();
                     vehicleThreads.remove(i);
                     vehicleList.remove(i);
                     currentCars--;

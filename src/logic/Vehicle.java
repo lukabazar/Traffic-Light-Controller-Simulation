@@ -1,5 +1,6 @@
 package logic;
 
+import GUI.TrafficGUI;
 import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 
@@ -174,6 +175,11 @@ public  abstract class Vehicle implements Runnable {
         return false;
     }
 
+
+    public void removeImage(){
+        TrafficGUI.removeCar(this.imageView);
+
+    }
 
 
 }
