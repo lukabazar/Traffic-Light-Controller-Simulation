@@ -234,9 +234,13 @@ public class Intersection implements Runnable {
                 String[] greenred = {"greenredppl1.png","greenredppl2.png","greenredppl3.png",
                         "greenredppl4.png","greenredppl5.png","greenredppl6.png","greenRed.png"};
                 for(int i=0; i<7; i++){
-                    images[intersectionNumber].setImage((new Image(greenred[i])));
+                    int finalI = i;
+                    Platform.runLater(() -> {
+                        images[intersectionNumber].setImage(
+                                (new Image(greenred[finalI])));
+                    });
                     try {
-                        Thread.sleep(300);
+                        Thread.sleep(400);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
