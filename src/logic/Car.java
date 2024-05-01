@@ -89,6 +89,7 @@ public class Car extends Vehicle {
                                                 this.getDirection()
                                                 , Lane.RIGHT);
                                         this.state = State.RIGHT_TURN;
+                                        this.setSpeed(getMaxSpeed());
                                         this.turnHeading =
                                                 this.getCurrentIntersection()
                                                         .getRightTurn(
@@ -113,6 +114,7 @@ public class Car extends Vehicle {
                                     this.setImageRotation(this.getDirection()
                                             , Lane.LEFT);
                                     this.state = State.LEFT_TURN;
+                                    this.setSpeed(getMaxSpeed());
                                     this.turnHeading =
                                             this.getCurrentIntersection()
                                                     .getLeftTurn(
