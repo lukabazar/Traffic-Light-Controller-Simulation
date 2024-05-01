@@ -12,7 +12,7 @@ public class EMS extends Vehicle {
 
 
     public EMS(Point p, Direction dir, Lane lane, double tileSize) {
-        this.setLocation(p);
+        this.setLocation(spawnAdust(p, dir));
         this.setDirection(dir);
         this.setLane(lane);
         setTileSize(tileSize);
@@ -20,6 +20,16 @@ public class EMS extends Vehicle {
         setImageRotation(getDirection(), null);
 
         TrafficGUI.addCar(getImageView());
+    }
+
+    public Point spawnAdust(Point p, Direction dir){
+
+        return switch (dir) {
+            case NORTH -> new Point(p.x, p.y + 100);
+            case SOUTH -> new Point(p.x, p.y - 100);
+            case EAST -> new Point(p.x - 100, p.y);
+            case WEST -> new Point(p.x + 100, p.y);
+        };
     }
 
     public ImageView initImageView() {
@@ -43,7 +53,6 @@ public class EMS extends Vehicle {
         if (lane == null) {
             switch (dir) {
                 case NORTH:
-                    // code block
                     getImageView().setRotate(0);
                     return;
                 case SOUTH:
@@ -98,8 +107,8 @@ public class EMS extends Vehicle {
         Point tempPoint = this.getLocation();
 
 
-        if (tempPoint.x < -50 || tempPoint.x > 1050 || tempPoint.y < -50 ||
-                tempPoint.y > 650) {
+        if (tempPoint.x < -150 || tempPoint.x > 1150 || tempPoint.y < -150 ||
+                tempPoint.y > 750) {
             running = false;
             this.setLocation(new Point(-100, -100));
             return true;
