@@ -170,9 +170,24 @@ public class SystemManager implements Runnable{
     }
 
     private void removeVehicles(){
-        int size = vehicleThreads.size();
+
+        int size = EMSThreads.size();
         if(size > 0){
-            for(int i = 0; i < size-1; i++){
+            for(int i = 0; i < size; i++){
+                if(!EMSThreads.get(i).isAlive()){
+                    //System.out.println("should remove car");
+                    EMSThreads.remove(i);
+                    EMSList.remove(i);
+                    currentCars--;
+                    break;
+                }
+            }
+        }
+
+
+        size = vehicleThreads.size();
+        if(size > 0){
+            for(int i = 0; i < size; i++){
                 if(!vehicleThreads.get(i).isAlive()){
                     //System.out.println("should remove car");
                     vehicleThreads.remove(i);
