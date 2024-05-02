@@ -69,32 +69,37 @@ public class Car extends Vehicle {
                     queryLight();
                 }
 
+                // switch case query
+
                 if (queryLight != null) {
-                    switch(queryLight){
+                    switch (queryLight) {
                         case GREEN:
                             collisionDetect();
-                            if (crossBarrier()) {
-                               this.state = State.BUFFER;
-                            }
-                            break;
-                        case LEFTGREEN:
-                            collisionDetect();
-                            if (getLane() != Lane.LEFT) {
-                                slowDown();;
-
-                            }
                             if (crossBarrier()) {
                                 this.state = State.BUFFER;
                             }
                             break;
+                        case LEFTGREEN:
+                            if (getLane() == Lane.LEFT) {
+                                collisionDetect();
+                                if (crossBarrier()) {
+                                    this.state = State.BUFFER;
+                                }
+                                break;
+                            }
+                            // request intersection for heading point
+                            // get the left turn barrier
+                            // maybe change direction to that turn?
                         case YELLOW:
                         case RED:
                         case LEFTYELLOW:
                         case EMS:
-                            if (slowDown()){
-                                break;
+                            if (!slowDown()) {
+                                collisionDetect();
+                                if (crossBarrier()) {
+                                    this.state = State.BUFFER;
+                                }
                             }
-                            collisionDetect();
                             break;
 
                         default:
@@ -106,9 +111,44 @@ public class Car extends Vehicle {
 
                 return finalMove();
             case BUFFER:
+                queryLight();
 
                 if (queryLight != null) {
                     switch (queryLight) {
+
+                        case LEFTGREEN:
+                        case LEFTYELLOW:
+                            if (getLane() == Lane.LEFT) {
+                                collisionDetect();
+                                if (inIntersection()) {
+                                    this.setImageRotation(this.getDirection()
+                                            , Lane.LEFT);
+                                    this.state = State.LEFT_TURN;
+                                    this.setSpeed(getMaxSpeed());
+                                    this.turnHeading =
+                                            this.getCurrentIntersection()
+                                                    .getLeftTurn(
+                                                            this.getDirection());
+                                    this.setDirection(getLeftDirection());
+                                    this.exitLine =
+                                            this.getCurrentIntersection()
+                                                    .getExitBarrier(
+                                                            this.getDirection());
+                                }
+                            } else {
+                                if (slowDown()){
+                                    break;
+                                }
+                                collisionDetect();
+                                break;
+                            }
+                            // request intersection for heading point
+                            // get the left turn barrier
+                            // maybe change direction to that turn?
+                            break;
+                        case YELLOW:
+                        case RED:
+                        case EMS:
                         case GREEN:
                             collisionDetect();
                             if (inIntersection()) {
@@ -133,52 +173,12 @@ public class Car extends Vehicle {
                                                         .getExitBarrier(
                                                                 this.getDirection());
                                     } else {
-                                        this.exitLine =
-                                                getCurrentIntersection().getExitBarrier(this.getDirection());
-                                        collisionDetect();
                                         this.state = State.STRAIGHT;
                                     }
                                 } else{
-                                    this.exitLine =
-                                            getCurrentIntersection().getExitBarrier(this.getDirection());
-                                    collisionDetect();
                                     this.state = State.STRAIGHT;
                                 }
                             }
-                            break;
-                        case LEFTGREEN:
-                            if (getLane() == Lane.LEFT) {
-                                collisionDetect();
-                                if (inIntersection()) {
-                                    this.setImageRotation(this.getDirection()
-                                            , Lane.LEFT);
-                                    this.state = State.LEFT_TURN;
-                                    this.setSpeed(getMaxSpeed());
-                                    this.turnHeading =
-                                            this.getCurrentIntersection()
-                                                    .getLeftTurn(
-                                                            this.getDirection());
-                                    this.setDirection(getLeftDirection());
-                                    this.exitLine =
-                                            this.getCurrentIntersection()
-                                                    .getExitBarrier(
-                                                            this.getDirection());
-                                }
-                            } else {
-                                collisionDetect();
-                            }
-                            // request intersection for heading point
-                            // get the left turn barrier
-                            // maybe change direction to that turn?
-                            break;
-                        case YELLOW:
-                        case RED:
-                        case LEFTYELLOW:
-                        case EMS:
-//                            if (slowDown()){
-//                                break;
-//                            }
-                            collisionDetect();
                             break;
 
                         default:
@@ -191,9 +191,10 @@ public class Car extends Vehicle {
                 return finalMove();
 
             case STRAIGHT:
-                collisionDetect();
                 this.queryLight = null;
-
+                this.exitLine =
+                        getCurrentIntersection().getExitBarrier(this.getDirection());
+                collisionDetect();
                 if (crossExitBarrier()){
                     this.state = State.ROAD;
 
@@ -209,6 +210,11 @@ public class Car extends Vehicle {
 
                 return true;
         }
+
+
+        //System.out.println(getId() + "" +tempPoint);
+
+
 
 
         return true;
@@ -275,18 +281,18 @@ public class Car extends Vehicle {
                     return;
                 case SOUTH:
                     Platform.runLater(() -> {
-                    getImageView().setRotate(180);
+                        getImageView().setRotate(180);
                     });
                     return;
 
                 case EAST:
                     Platform.runLater(() -> {
-                    getImageView().setRotate(90);
+                        getImageView().setRotate(90);
                     });
                     return;
                 case WEST:
                     Platform.runLater(() -> {
-                    getImageView().setRotate(270);
+                        getImageView().setRotate(270);
                     });
                     return;
             }
@@ -306,7 +312,7 @@ public class Car extends Vehicle {
                     if(lane.equals(Lane.LEFT)){
                         Platform.runLater(() -> {
 
-                        getImageView().setRotate(135);});
+                            getImageView().setRotate(135);});
                     } else {Platform.runLater(() -> {
                         getImageView().setRotate(225);});
                     }
@@ -441,7 +447,7 @@ public class Car extends Vehicle {
      * slow down car if it is within minBufferDistance of stop line for red light
      */
     public boolean slowDown() {
-        if (distanceToStopLine()) {
+        if (this.state != State.BUFFER && distanceToStopLine()) {
             double new_speed = this.getSpeed() - 1;
 
             if (new_speed < 0) {
@@ -462,16 +468,6 @@ public class Car extends Vehicle {
             case WEST -> this.getLocation().getX() <= this.stopLine;
         };
     }
-
-    public boolean inIntersection() {
-        return switch (this.getDirection()) {
-            case NORTH -> this.getLocation().getY() <= this.barrierLine;
-            case SOUTH -> this.getLocation().getY() >= this.barrierLine;
-            case EAST -> this.getLocation().getX() >= this.barrierLine;
-            case WEST -> this.getLocation().getX() <= this.barrierLine;
-        };
-    }
-
 
     public boolean crossExitBarrier() {
         return switch (this.getDirection()) {
@@ -579,7 +575,7 @@ public class Car extends Vehicle {
     }
 
     public void turnMovement(){
-        moveTowards(turnHeading,4);
+        moveTowards(turnHeading,5);
         // move to headng
         // if crossbarrier
         // set location to that point
@@ -593,5 +589,15 @@ public class Car extends Vehicle {
             this.setImageRotation(this.getDirection(), null);
         }
     }
+
+    public boolean inIntersection() {
+        return switch (this.getDirection()) {
+            case NORTH -> this.getLocation().getY() <= this.barrierLine;
+            case SOUTH -> this.getLocation().getY() >= this.barrierLine;
+            case EAST -> this.getLocation().getX() >= this.barrierLine;
+            case WEST -> this.getLocation().getX() <= this.barrierLine;
+        };
+    }
+
 }
 

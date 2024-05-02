@@ -15,13 +15,13 @@ import java.util.concurrent.TimeUnit;
 
 public class Intersection implements Runnable {
     private long greenRedDuration = 8000;
-            // green and red light have minimum of 5 second duration
+    // green and red light have minimum of 5 second duration
     private final long yellowDuration = 3500;
     private final long leftDuration = 4000;
-            // yellow light minimum of 2 second duration
+    // yellow light minimum of 2 second duration
     private final long accLimit = 10;// number of cars required to change light
     private final long minLength = 4000;
-            //minimum time spent during red or green light
+    //minimum time spent during red or green light
     private long lightChangeTime; // time of previous light change
     private final int intersectionNumber; //
     private LightDirection northSouthDir; // direction of north, south lights
@@ -32,10 +32,10 @@ public class Intersection implements Runnable {
 
     private Point center;
     private int northStop, southStop, eastStop, westStop;
-            // northStop = boundary incoming cars from NORTH may not cross
-            // when RED
+    // northStop = boundary incoming cars from NORTH may not cross
+    // when RED
     private int northBarrier, southBarrier, eastBarrier, westBarrier;
-            // north/south refer to a Y coordinate, east/west X coordinate
+    // north/south refer to a Y coordinate, east/west X coordinate
     private ArrayList<Point> exits = new ArrayList<>();
     private ArrayList<Point> spawns = new ArrayList<>();
 
@@ -236,8 +236,8 @@ public class Intersection implements Runnable {
                 for(int i=0; i<7; i++){
                     int finalI = i;
                     //Platform.runLater(() -> {
-                        images[intersectionNumber].setImage(
-                                (new Image(greenred[finalI])));
+                    images[intersectionNumber].setImage(
+                            (new Image(greenred[finalI])));
                     //});
                     try {
                         Thread.sleep(400);
@@ -302,23 +302,23 @@ public class Intersection implements Runnable {
             return LightColor.RED;
         } else if(color1 ==
                 LightColor.RED
-                    && color2 == LightColor.LEFTGREEN) {
+                && color2 == LightColor.LEFTGREEN) {
             return LightColor.LEFTYELLOW;
         }
         else if(color1 ==
-                    LightColor.RED
-                    && color2 == LightColor.LEFTYELLOW) {
+                LightColor.RED
+                && color2 == LightColor.LEFTYELLOW) {
             return LightColor.GREEN;
 
         }else if (color1 ==
                 LightColor.RED &&
-                        color2 == LightColor.RED){
+                color2 == LightColor.RED){
             return LightColor.LEFTGREEN;
         }else if(color1 ==
-                        LightColor.LEFTGREEN) {
+                LightColor.LEFTGREEN) {
             return LightColor.RED;
         }else if (color1 ==
-                        LightColor.LEFTYELLOW){
+                LightColor.LEFTYELLOW){
             return LightColor.RED;
         }
         else{
@@ -368,7 +368,7 @@ public class Intersection implements Runnable {
 
         } else if (direction == LightDirection.EASTWEST
                 && (northSouthColor == LightColor.GREEN
-                            && newColor == LightColor.LEFTGREEN)){//this is the one that was skipping yellow
+                && newColor == LightColor.LEFTGREEN)){//this is the one that was skipping yellow
             northSouthColor = LightColor.YELLOW;
             eastWestColor =LightColor.RED;//keep red for duration of yellow light
         }

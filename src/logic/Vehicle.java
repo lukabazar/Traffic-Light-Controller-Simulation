@@ -11,7 +11,7 @@ public  abstract class Vehicle implements Runnable {
     private double speed = 5;
     private float transparency = 0;
     private boolean intersectionFlag = false;
-    final double minBufferDistance = 40;
+    final double minBufferDistance = 30;
     private Point location = new Point();
     private Lane lane;
     private boolean running = false;
@@ -86,7 +86,7 @@ public  abstract class Vehicle implements Runnable {
     }
 
     public double getMinBufferDistance() {
-        return this.minBufferDistance;
+        return this.minBufferDistance + this.speed * 8;
     }
 
     public void flipIntersectionFlag(){
