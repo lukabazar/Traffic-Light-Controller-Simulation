@@ -235,10 +235,10 @@ public class Intersection implements Runnable {
                         "greenredppl4.png","greenredppl5.png","greenredppl6.png","greenRed.png"};
                 for(int i=0; i<7; i++){
                     int finalI = i;
-                    Platform.runLater(() -> {
+                    //Platform.runLater(() -> {
                         images[intersectionNumber].setImage(
                                 (new Image(greenred[finalI])));
-                    });
+                    //});
                     try {
                         Thread.sleep(400);
                     } catch (InterruptedException e) {
