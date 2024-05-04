@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static GUI.TrafficGUI.updateIntersectionGUI;
+
 public class Intersection implements Runnable {
     private long greenRedDuration = 8000;
     // green and red light have minimum of 5 second duration
@@ -48,6 +50,8 @@ public class Intersection implements Runnable {
     private int northSouthAcc;
     private boolean EMSinbound = false;
     private boolean EMSprior = false;
+    private boolean pedestrians = false;
+    private boolean EMShappened = false;
 
     // assuming that there will be some sort of number assigned to an
     // intersection so that we can differentiate btwn them
@@ -242,18 +246,27 @@ public class Intersection implements Runnable {
                         "greenredppl3.png",
                         "greenredppl4.png", "greenredppl5.png",
                         "greenredppl6.png", "greenRed.png"};
+                this.pedestrians = true;
+                long sleep = 500;
                 for (int i = 0; i < 7; i++) {
+                    if (EMShappened){
+                        i = 6;
+                        EMShappened = false;
+                    }
+                    if(EMSinbound){
+                        sleep = 300;
+                    }
                     int finalI = i;
                     //Platform.runLater(() -> {
-                    images[intersectionNumber].setImage(
-                            (new Image(greenred[finalI])));
+                    updateIntersectionGUI(this.intersectionNumber, greenred[i]);
                     //});
                     try {
-                        Thread.sleep(400);
+                        Thread.sleep(sleep);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
+                this.pedestrians = false;
 
 
             }
@@ -263,15 +276,24 @@ public class Intersection implements Runnable {
                         "redgreenppl2.png", "redgreenppl3.png",
                         "redgreenppl1.png",
                         "redgreenppl4.png", "redgreenppl5.png", "redgreen.png"};
+                this.pedestrians = true;
+                long sleep = 500;
                 for (int i = 0; i < 7; i++) {
-                    images[intersectionNumber].setImage(
-                            new Image(redgreenppl[i]));
+                    if (EMShappened){
+                        i = 6;
+                        EMShappened = false;
+                    }
+                    if(EMSinbound){
+                        sleep = 300;
+                    }
+                    updateIntersectionGUI(this.intersectionNumber, redgreenppl[i]);
                     try {
-                        Thread.sleep(300);
+                        Thread.sleep(sleep);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
+                this.pedestrians = false;
 
 
             }
@@ -367,6 +389,7 @@ public class Intersection implements Runnable {
 
         if (direction == LightDirection.NORTHSOUTH) {
             if (northSouthColor == LightColor.LEFTYELLOW) {
+                pedestrians = true;
                 northSouthColor = LightColor.GREEN;
                 eastWestColor = LightColor.RED;
             } else if (northSouthColor == LightColor.LEFTGREEN) {
@@ -388,6 +411,10 @@ public class Intersection implements Runnable {
             northSouthColor = LightColor.YELLOW;
             eastWestColor =
                     LightColor.RED;//keep red for duration of yellow light
+        } else if (eastWestColor == LightColor.LEFTYELLOW){
+                pedestrians = true;
+                eastWestColor = LightColor.GREEN;
+                northSouthColor = LightColor.RED;
         } else if (direction == LightDirection.EASTWEST) {
             northSouthColor = oppositeLight(newColor, northSouthColor);
             eastWestColor = newColor;
@@ -406,6 +433,8 @@ public class Intersection implements Runnable {
             return;
         }
         if (this.EMSprior && !this.EMSinbound){
+            this.EMShappened = true;
+            this.pedestrians = true;
             toggleEMSRedLights();
             this.EMSprior = false;
             this.setImages();
@@ -561,6 +590,10 @@ public class Intersection implements Runnable {
             }
         }
 
+    }
+
+    public boolean getPedestrians(){
+        return this.pedestrians;
     }
 
 

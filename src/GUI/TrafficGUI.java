@@ -40,6 +40,7 @@ public class TrafficGUI {
     private final Scene scene;
     private final Rectangle2D screenSize = Screen.getPrimary().getBounds();
     public static ImageView[] intersectionImages = new ImageView[6];
+    public static StackPane[] intersectionSP = new StackPane[6];
     private final Stage popUp = new Stage();
     private final int rows;
     private final int cols;
@@ -118,6 +119,7 @@ public class TrafficGUI {
                 ImageView grass = setImageView("grassTrees.png", size);
 
                 StackPane stackPane = new StackPane(grass, imageView);
+                this.intersectionSP[interIndex-1] = stackPane;
                 Circle overlay = new Circle(size / 2 - 5);
                 overlay.setFill(Color.LIGHTBLUE);
                 overlay.setOpacity(0.33);
@@ -189,40 +191,14 @@ public class TrafficGUI {
         });
     }
 
-    public void looper() {
-        new Thread(() -> {
-            Platform.runLater(() -> {
-                vehiclePane.getChildren().clear();
-                // Perform other JavaFX scene graph modifications here
-            });
-            for (Vehicle vehicle: SystemManager.vehicleList){
-                Platform.runLater(() -> {
-                    vehiclePane.getChildren().add(vehicle.getImageView());
-                });
-            }
-            final int[] x = {900}; // Using an array to hold the mutable value
-            final int y = 100; // y can remain as is
+    public static void updateIntersectionGUI(int i, String filename){
 
-            while (true) {
-                x[0]--; // Decrement x
-                if (x[0] < 10){
-                    x[0] = 1000;
-                }
+            intersectionImages[i].setImage(
+                    new Image(filename));
+        Platform.runLater(() -> {
+            intersectionSP[i].requestFocus();
+        });
 
-                // Update the position of imageView1
-//                Platform.runLater(() -> {
-//                    imageView1.setLayoutX(x[0]); // Using x[0]
-//                    imageView1.setLayoutY(y);
-//                });
-
-                try {
-                    Thread.sleep(100); // Sleep for 1 second before updating
-                    // again
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     public static double getTileSize(){
